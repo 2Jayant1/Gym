@@ -75,8 +75,8 @@ export default function MemberAttendancePage() {
       [r.date, r.checkIn, r.checkOut].some((v) =>
         String(v ?? '')
           .toLowerCase()
-          .includes(s)
-      )
+          .includes(s),
+      ),
     );
   }, [rows, q]);
 
@@ -88,12 +88,7 @@ export default function MemberAttendancePage() {
         <>
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search…"
-              className="input pl-9"
-            />
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search…" className="input pl-9" />
           </div>
           <button onClick={load} className="btn-ghost" title="Refresh">
             <RefreshCcw className={loading ? 'h-4 w-4 animate-spin' : 'h-4 w-4'} />
@@ -103,20 +98,35 @@ export default function MemberAttendancePage() {
       }
     >
       {/* Check-in/out action + stats */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+      >
         <div className="card flex flex-col items-center justify-center py-6">
           {checkedIn ? (
-            <button onClick={handleCheckOut} disabled={actionBusy} className="btn-primary bg-rose-600 hover:bg-rose-700 flex items-center gap-2">
+            <button
+              onClick={handleCheckOut}
+              disabled={actionBusy}
+              className="btn-primary bg-rose-600 hover:bg-rose-700 flex items-center gap-2"
+            >
               <LogOut className="h-4 w-4" />
               {actionBusy ? 'Processing…' : 'Check Out'}
             </button>
           ) : (
-            <button onClick={handleCheckIn} disabled={actionBusy} className="btn-primary bg-emerald-600 hover:bg-emerald-700 flex items-center gap-2">
+            <button
+              onClick={handleCheckIn}
+              disabled={actionBusy}
+              className="btn-primary bg-emerald-600 hover:bg-emerald-700 flex items-center gap-2"
+            >
               <LogIn className="h-4 w-4" />
               {actionBusy ? 'Processing…' : 'Check In'}
             </button>
           )}
-          <span className="text-xs text-slate-500 mt-2">{checkedIn ? 'You are currently checked in' : 'Tap to check in'}</span>
+          <span className="text-xs text-slate-500 mt-2">
+            {checkedIn ? 'You are currently checked in' : 'Tap to check in'}
+          </span>
         </div>
         <div className="card text-center">
           <div className="text-2xl font-bold text-slate-800">{totalVisits}</div>
@@ -136,9 +146,7 @@ export default function MemberAttendancePage() {
           <div className="text-slate-700 font-bold flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4 text-slate-600" /> Attendance
           </div>
-          <div className="text-slate-500 text-xs">
-            {loading ? 'Loading…' : `${filtered.length} shown`}
-          </div>
+          <div className="text-slate-500 text-xs">{loading ? 'Loading…' : `${filtered.length} shown`}</div>
         </div>
 
         {error ? <div className="p-4 text-red-600 text-sm">{error}</div> : null}

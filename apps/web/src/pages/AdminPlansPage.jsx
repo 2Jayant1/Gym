@@ -85,40 +85,77 @@ export default function AdminPlansPage() {
           <form onSubmit={submit} className="space-y-3">
             <div>
               <label className="label">Name</label>
-              <input className="input" value={form.name} onChange={(e) => setForm((s) => ({ ...s, name: e.target.value }))} required />
+              <input
+                className="input"
+                value={form.name}
+                onChange={(e) => setForm((s) => ({ ...s, name: e.target.value }))}
+                required
+              />
             </div>
             <div>
               <label className="label">Description</label>
-              <input className="input" value={form.description} onChange={(e) => setForm((s) => ({ ...s, description: e.target.value }))} />
+              <input
+                className="input"
+                value={form.description}
+                onChange={(e) => setForm((s) => ({ ...s, description: e.target.value }))}
+              />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="label">Monthly fee</label>
-                <input type="number" className="input" value={form.monthlyFee} onChange={(e) => setForm((s) => ({ ...s, monthlyFee: e.target.value }))} />
+                <input
+                  type="number"
+                  className="input"
+                  value={form.monthlyFee}
+                  onChange={(e) => setForm((s) => ({ ...s, monthlyFee: e.target.value }))}
+                />
               </div>
               <div>
                 <label className="label">Duration (days)</label>
-                <input type="number" className="input" value={form.durationDays} onChange={(e) => setForm((s) => ({ ...s, durationDays: e.target.value }))} />
+                <input
+                  type="number"
+                  className="input"
+                  value={form.durationDays}
+                  onChange={(e) => setForm((s) => ({ ...s, durationDays: e.target.value }))}
+                />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="label">Signup fee</label>
-                <input type="number" className="input" value={form.signupFee} onChange={(e) => setForm((s) => ({ ...s, signupFee: e.target.value }))} />
+                <input
+                  type="number"
+                  className="input"
+                  value={form.signupFee}
+                  onChange={(e) => setForm((s) => ({ ...s, signupFee: e.target.value }))}
+                />
               </div>
               <div>
                 <label className="label">Cancellation fee</label>
-                <input type="number" className="input" value={form.cancellationFee} onChange={(e) => setForm((s) => ({ ...s, cancellationFee: e.target.value }))} />
+                <input
+                  type="number"
+                  className="input"
+                  value={form.cancellationFee}
+                  onChange={(e) => setForm((s) => ({ ...s, cancellationFee: e.target.value }))}
+                />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="label">Max visits / week</label>
-                <input className="input" value={form.maxVisitsPerWeek} onChange={(e) => setForm((s) => ({ ...s, maxVisitsPerWeek: e.target.value }))} />
+                <input
+                  className="input"
+                  value={form.maxVisitsPerWeek}
+                  onChange={(e) => setForm((s) => ({ ...s, maxVisitsPerWeek: e.target.value }))}
+                />
               </div>
               <div>
                 <label className="label">Status</label>
-                <select className="input" value={form.status} onChange={(e) => setForm((s) => ({ ...s, status: e.target.value }))}>
+                <select
+                  className="input"
+                  value={form.status}
+                  onChange={(e) => setForm((s) => ({ ...s, status: e.target.value }))}
+                >
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
                 </select>
@@ -126,16 +163,26 @@ export default function AdminPlansPage() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <label className="flex items-center gap-2 text-slate-600 text-sm">
-                <input type="checkbox" checked={form.includesTrainer} onChange={(e) => setForm((s) => ({ ...s, includesTrainer: e.target.checked }))} />
+                <input
+                  type="checkbox"
+                  checked={form.includesTrainer}
+                  onChange={(e) => setForm((s) => ({ ...s, includesTrainer: e.target.checked }))}
+                />
                 Includes trainer
               </label>
               <label className="flex items-center gap-2 text-slate-600 text-sm">
-                <input type="checkbox" checked={form.includesClasses} onChange={(e) => setForm((s) => ({ ...s, includesClasses: e.target.checked }))} />
+                <input
+                  type="checkbox"
+                  checked={form.includesClasses}
+                  onChange={(e) => setForm((s) => ({ ...s, includesClasses: e.target.checked }))}
+                />
                 Includes classes
               </label>
             </div>
             <div className="flex items-center justify-between">
-              <button type="submit" className="btn-primary">{editing ? 'Save changes' : 'Create plan'}</button>
+              <button type="submit" className="btn-primary">
+                {editing ? 'Save changes' : 'Create plan'}
+              </button>
               {editing ? (
                 <button
                   type="button"
@@ -154,7 +201,14 @@ export default function AdminPlansPage() {
 
         <div className="lg:col-span-2 space-y-4">
           {plans.map((p, i) => (
-            <motion.div key={p._id || p.id} className="card flex items-start justify-between gap-4" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} whileHover={{ y: -2 }}>
+            <motion.div
+              key={p._id || p.id}
+              className="card flex items-start justify-between gap-4"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.05 }}
+              whileHover={{ y: -2 }}
+            >
               <div>
                 <div className="text-slate-900 font-semibold text-lg flex items-center gap-2">
                   {p.name}
@@ -163,7 +217,9 @@ export default function AdminPlansPage() {
                       <CheckCircle2 className="h-3 w-3" /> Active
                     </span>
                   ) : (
-                    <span className="text-xs text-slate-600 bg-slate-100 border border-slate-200 rounded-full px-2 py-1">Inactive</span>
+                    <span className="text-xs text-slate-600 bg-slate-100 border border-slate-200 rounded-full px-2 py-1">
+                      Inactive
+                    </span>
                   )}
                 </div>
                 <div className="text-slate-500 text-sm mt-1">{p.description || '—'}</div>
@@ -171,7 +227,8 @@ export default function AdminPlansPage() {
                   ${p.monthlyFee} / {p.durationDays} days · Signup ${p.signupFee} · Cancel ${p.cancellationFee}
                 </div>
                 <div className="text-slate-500 text-xs mt-2">
-                  {p.includesTrainer ? 'Trainer included' : 'Trainer optional'} · {p.includesClasses ? 'Classes included' : 'Classes optional'}
+                  {p.includesTrainer ? 'Trainer included' : 'Trainer optional'} ·{' '}
+                  {p.includesClasses ? 'Classes included' : 'Classes optional'}
                 </div>
               </div>
               <div className="flex flex-col gap-2">

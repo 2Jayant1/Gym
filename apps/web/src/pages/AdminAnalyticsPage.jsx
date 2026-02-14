@@ -17,7 +17,10 @@ export default function AdminAnalyticsPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    api.get('/api/admin/analytics/overview').then((res) => setOverview(res.data || {})).catch(() => null);
+    api
+      .get('/api/admin/analytics/overview')
+      .then((res) => setOverview(res.data || {}))
+      .catch(() => null);
     api
       .get('/api/admin/analytics/details')
       .then((res) => setDetails(res.data || {}))
@@ -28,14 +31,39 @@ export default function AdminAnalyticsPage() {
     <PageShell title="Analytics" subtitle="Operational insights and revenue tracking.">
       {error ? <div className="card border border-red-200/60 text-red-600">{error}</div> : null}
 
-      <motion.div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
         <StatCard title="Total Users" value={overview.totalUsers || 0} Icon={BarChart3} />
-        <StatCard title="Active Users" value={overview.activeUsers || 0} Icon={TrendingUp} colorClass="text-emerald-600" />
-        <StatCard title="Total Visits" value={overview.totalVisits || 0} Icon={TrendingUp} colorClass="text-amber-600" />
-        <StatCard title="Revenue" value={`$${(overview.totalRevenue || 0).toFixed(2)}`} Icon={BarChart3} colorClass="text-indigo-600" />
+        <StatCard
+          title="Active Users"
+          value={overview.activeUsers || 0}
+          Icon={TrendingUp}
+          colorClass="text-emerald-600"
+        />
+        <StatCard
+          title="Total Visits"
+          value={overview.totalVisits || 0}
+          Icon={TrendingUp}
+          colorClass="text-amber-600"
+        />
+        <StatCard
+          title="Revenue"
+          value={`$${(overview.totalRevenue || 0).toFixed(2)}`}
+          Icon={BarChart3}
+          colorClass="text-indigo-600"
+        />
       </motion.div>
 
-      <motion.div className="grid grid-cols-1 lg:grid-cols-2 gap-6" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}>
+      <motion.div
+        className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+      >
         <div className="card">
           <div className="text-slate-800 font-semibold mb-3">Users by role</div>
           <div className="space-y-2 text-sm">
@@ -89,7 +117,12 @@ export default function AdminAnalyticsPage() {
         </div>
       </motion.div>
 
-      <motion.div className="card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.2 }}>
+      <motion.div
+        className="card"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+      >
         <div className="text-slate-800 font-semibold mb-3">Monthly revenue</div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
           {details.monthlyRevenue?.map((m) => (

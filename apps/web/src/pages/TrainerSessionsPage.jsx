@@ -10,7 +10,16 @@ function formatDate(d) {
   return String(d);
 }
 
-const emptySession = { userId: '', sessionDate: '', startTime: '', endTime: '', durationMinutes: 45, sessionType: 'personal', notes: '', cost: '' };
+const emptySession = {
+  userId: '',
+  sessionDate: '',
+  startTime: '',
+  endTime: '',
+  durationMinutes: 45,
+  sessionType: 'personal',
+  notes: '',
+  cost: '',
+};
 
 export default function TrainerSessionsPage() {
   const [rows, setRows] = useState([]);
@@ -39,7 +48,10 @@ export default function TrainerSessionsPage() {
 
   useEffect(() => {
     load();
-    api.get('/api/users').then((res) => setMembers((res.data || []).filter((u) => u.role === 'member'))).catch(() => null);
+    api
+      .get('/api/users')
+      .then((res) => setMembers((res.data || []).filter((u) => u.role === 'member')))
+      .catch(() => null);
   }, []);
 
   const handleCreate = async (e) => {
@@ -76,18 +88,9 @@ export default function TrainerSessionsPage() {
     const s = q.trim().toLowerCase();
     if (!s) return rows;
     return rows.filter((r) =>
-      [
-        r.member_name,
-        r.member_email,
-        r.sessionType,
-        r.notes,
-        r.status,
-        r.sessionDate,
-        r.startTime,
-        r.endTime,
-      ]
+      [r.member_name, r.member_email, r.sessionType, r.notes, r.status, r.sessionDate, r.startTime, r.endTime]
         .filter(Boolean)
-        .some((v) => String(v).toLowerCase().includes(s))
+        .some((v) => String(v).toLowerCase().includes(s)),
     );
   }, [rows, q]);
 
@@ -103,12 +106,7 @@ export default function TrainerSessionsPage() {
           </button>
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search…"
-              className="input pl-9"
-            />
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search…" className="input pl-9" />
           </div>
           <button onClick={load} className="btn-ghost" title="Refresh">
             <RefreshCcw className={loading ? 'h-4 w-4 animate-spin' : 'h-4 w-4'} />
@@ -123,28 +121,96 @@ export default function TrainerSessionsPage() {
           <form onSubmit={handleCreate} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <label className="label">Member</label>
-              <select className="input" value={form.userId} onChange={(e) => setForm((s) => ({ ...s, userId: e.target.value }))} required>
+              <select
+                className="input"
+                value={form.userId}
+                onChange={(e) => setForm((s) => ({ ...s, userId: e.target.value }))}
+                required
+              >
                 <option value="">Select member</option>
-                {members.map((m) => <option key={m.id} value={m.id}>{m.name} ({m.email})</option>)}
+                {members.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.name} ({m.email})
+                  </option>
+                ))}
               </select>
             </div>
-            <div><label className="label">Date</label><input type="date" className="input" value={form.sessionDate} onChange={(e) => setForm((s) => ({ ...s, sessionDate: e.target.value }))} required /></div>
-            <div><label className="label">Start Time</label><input type="time" className="input" value={form.startTime} onChange={(e) => setForm((s) => ({ ...s, startTime: e.target.value }))} required /></div>
-            <div><label className="label">End Time</label><input type="time" className="input" value={form.endTime} onChange={(e) => setForm((s) => ({ ...s, endTime: e.target.value }))} required /></div>
+            <div>
+              <label className="label">Date</label>
+              <input
+                type="date"
+                className="input"
+                value={form.sessionDate}
+                onChange={(e) => setForm((s) => ({ ...s, sessionDate: e.target.value }))}
+                required
+              />
+            </div>
+            <div>
+              <label className="label">Start Time</label>
+              <input
+                type="time"
+                className="input"
+                value={form.startTime}
+                onChange={(e) => setForm((s) => ({ ...s, startTime: e.target.value }))}
+                required
+              />
+            </div>
+            <div>
+              <label className="label">End Time</label>
+              <input
+                type="time"
+                className="input"
+                value={form.endTime}
+                onChange={(e) => setForm((s) => ({ ...s, endTime: e.target.value }))}
+                required
+              />
+            </div>
             <div>
               <label className="label">Type</label>
-              <select className="input" value={form.sessionType} onChange={(e) => setForm((s) => ({ ...s, sessionType: e.target.value }))}>
+              <select
+                className="input"
+                value={form.sessionType}
+                onChange={(e) => setForm((s) => ({ ...s, sessionType: e.target.value }))}
+              >
                 <option value="personal">Personal</option>
                 <option value="group">Group</option>
                 <option value="assessment">Assessment</option>
               </select>
             </div>
-            <div><label className="label">Duration (min)</label><input type="number" className="input" value={form.durationMinutes} onChange={(e) => setForm((s) => ({ ...s, durationMinutes: e.target.value }))} /></div>
-            <div><label className="label">Cost ($)</label><input type="number" step="0.01" className="input" value={form.cost} onChange={(e) => setForm((s) => ({ ...s, cost: e.target.value }))} /></div>
-            <div className="md:col-span-2"><label className="label">Notes</label><input className="input" value={form.notes} onChange={(e) => setForm((s) => ({ ...s, notes: e.target.value }))} /></div>
+            <div>
+              <label className="label">Duration (min)</label>
+              <input
+                type="number"
+                className="input"
+                value={form.durationMinutes}
+                onChange={(e) => setForm((s) => ({ ...s, durationMinutes: e.target.value }))}
+              />
+            </div>
+            <div>
+              <label className="label">Cost ($)</label>
+              <input
+                type="number"
+                step="0.01"
+                className="input"
+                value={form.cost}
+                onChange={(e) => setForm((s) => ({ ...s, cost: e.target.value }))}
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="label">Notes</label>
+              <input
+                className="input"
+                value={form.notes}
+                onChange={(e) => setForm((s) => ({ ...s, notes: e.target.value }))}
+              />
+            </div>
             <div className="md:col-span-2 lg:col-span-3 flex justify-end gap-2">
-              <button type="button" onClick={() => setShowForm(false)} className="btn-ghost">Cancel</button>
-              <button type="submit" disabled={busy} className="btn-primary">{busy ? 'Creating…' : 'Create Session'}</button>
+              <button type="button" onClick={() => setShowForm(false)} className="btn-ghost">
+                Cancel
+              </button>
+              <button type="submit" disabled={busy} className="btn-primary">
+                {busy ? 'Creating…' : 'Create Session'}
+              </button>
             </div>
           </form>
         </div>
@@ -155,9 +221,7 @@ export default function TrainerSessionsPage() {
             <Calendar className="h-4 w-4 text-slate-600" />
             Sessions
           </div>
-          <div className="text-slate-500 text-xs">
-            {loading ? 'Loading…' : `${filtered.length} shown`}
-          </div>
+          <div className="text-slate-500 text-xs">{loading ? 'Loading…' : `${filtered.length} shown`}</div>
         </div>
 
         {error ? <div className="p-4 text-red-600 text-sm">{error}</div> : null}
@@ -202,7 +266,10 @@ export default function TrainerSessionsPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <button onClick={() => handleDelete(r.id || r._id)} className="text-rose-500 hover:text-rose-700 transition-colors">
+                      <button
+                        onClick={() => handleDelete(r.id || r._id)}
+                        className="text-rose-500 hover:text-rose-700 transition-colors"
+                      >
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </td>

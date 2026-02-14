@@ -16,10 +16,7 @@ export default function AdminSupportPage() {
   const load = () => {
     setLoading(true);
     setError('');
-    Promise.all([
-      api.get('/api/admin/crud/support_tickets'),
-      api.get('/api/admin/crud/support_categories'),
-    ])
+    Promise.all([api.get('/api/admin/crud/support_tickets'), api.get('/api/admin/crud/support_categories')])
       .then(([t, c]) => {
         setTickets(t.data || []);
         setCategories(c.data || []);
@@ -49,7 +46,14 @@ export default function AdminSupportPage() {
 
       <div className="space-y-4">
         {tickets.map((t, i) => (
-          <motion.div key={t._id || t.id} className="card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} whileHover={{ y: -2 }}>
+          <motion.div
+            key={t._id || t.id}
+            className="card"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.05 }}
+            whileHover={{ y: -2 }}
+          >
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
               <div className="min-w-0 flex-1">
                 <div className="text-slate-900 font-semibold text-base sm:text-lg">{t.title}</div>

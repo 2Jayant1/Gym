@@ -46,14 +46,16 @@ class AdminService {
   }
 
   logAudit({ action, targetModel, targetId, metadata, req }) {
-    return this.repos.auditLog.create({
-      actor: req.user?.id,
-      action,
-      targetModel,
-      targetId,
-      metadata,
-      ip: req.ip,
-    }).catch(() => {});
+    return this.repos.auditLog
+      .create({
+        actor: req.user?.id,
+        action,
+        targetModel,
+        targetId,
+        metadata,
+        ip: req.ip,
+      })
+      .catch(() => {});
   }
 
   /* ═══════════════ TABLES OVERVIEW ═══════════════ */
@@ -85,14 +87,18 @@ class AdminService {
 
   async getTrainingSessions({ skip, limit }) {
     const [rows, total] = await Promise.all([
-      this.repos.trainingSession.find({}, {
-        sort: { sessionDate: -1, startTime: -1 },
-        skip, limit,
-        populate: [
-          { path: 'trainer', populate: { path: 'user', select: 'name' } },
-          { path: 'user', select: 'name' },
-        ],
-      }),
+      this.repos.trainingSession.find(
+        {},
+        {
+          sort: { sessionDate: -1, startTime: -1 },
+          skip,
+          limit,
+          populate: [
+            { path: 'trainer', populate: { path: 'user', select: 'name' } },
+            { path: 'user', select: 'name' },
+          ],
+        },
+      ),
       this.repos.trainingSession.count({}),
     ]);
 
@@ -157,9 +163,7 @@ class AdminService {
       this.repos.user.estimatedCount(),
       this.repos.user.count({ status: 'active' }),
       this.repos.attendance.estimatedCount(),
-      this.repos.invoice.aggregate([
-        { $group: { _id: null, totalRevenue: { $sum: '$totalAmount' } } },
-      ]),
+      this.repos.invoice.aggregate([{ $group: { _id: null, totalRevenue: { $sum: '$totalAmount' } } }]),
     ]);
     return {
       totalUsers,
@@ -170,34 +174,35 @@ class AdminService {
   }
 
   async getAnalyticsDetails() {
-    const [usersByRole, planDistribution, revenueByStatus, paymentsByMethod, monthlyRevenue] =
-      await Promise.all([
-        this.repos.user.aggregate([
-          { $group: { _id: '$role', count: { $sum: 1 } } },
-          { $project: { role: '$_id', count: 1, _id: 0 } },
-        ]),
-        this.repos.user.aggregate([
-          { $group: { _id: '$membershipPlan', count: { $sum: 1 } } },
-          { $lookup: { from: 'membershipplans', localField: '_id', foreignField: '_id', as: 'plan' } },
-          { $unwind: { path: '$plan', preserveNullAndEmptyArrays: true } },
-          { $project: { name: '$plan.name', count: 1, _id: 0 } },
-        ]),
-        this.repos.invoice.aggregate([
-          { $group: { _id: '$status', total: { $sum: '$totalAmount' } } },
-          { $project: { status: '$_id', total: 1, _id: 0 } },
-        ]),
-        this.repos.payment.aggregate([
-          { $group: { _id: '$paymentMethod', total: { $sum: '$amount' } } },
-          { $project: { method: '$_id', total: 1, _id: 0 } },
-        ]),
-        this.repos.invoice.aggregate([
-          { $group: { _id: { $dateToString: { format: '%Y-%m', date: '$issueDate' } }, total: { $sum: '$totalAmount' } } },
-          { $project: { month: '$_id', total: 1, _id: 0 } },
-          { $sort: { month: -1 } },
-          { $limit: 6 },
-          { $sort: { month: 1 } },
-        ]),
-      ]);
+    const [usersByRole, planDistribution, revenueByStatus, paymentsByMethod, monthlyRevenue] = await Promise.all([
+      this.repos.user.aggregate([
+        { $group: { _id: '$role', count: { $sum: 1 } } },
+        { $project: { role: '$_id', count: 1, _id: 0 } },
+      ]),
+      this.repos.user.aggregate([
+        { $group: { _id: '$membershipPlan', count: { $sum: 1 } } },
+        { $lookup: { from: 'membershipplans', localField: '_id', foreignField: '_id', as: 'plan' } },
+        { $unwind: { path: '$plan', preserveNullAndEmptyArrays: true } },
+        { $project: { name: '$plan.name', count: 1, _id: 0 } },
+      ]),
+      this.repos.invoice.aggregate([
+        { $group: { _id: '$status', total: { $sum: '$totalAmount' } } },
+        { $project: { status: '$_id', total: 1, _id: 0 } },
+      ]),
+      this.repos.payment.aggregate([
+        { $group: { _id: '$paymentMethod', total: { $sum: '$amount' } } },
+        { $project: { method: '$_id', total: 1, _id: 0 } },
+      ]),
+      this.repos.invoice.aggregate([
+        {
+          $group: { _id: { $dateToString: { format: '%Y-%m', date: '$issueDate' } }, total: { $sum: '$totalAmount' } },
+        },
+        { $project: { month: '$_id', total: 1, _id: 0 } },
+        { $sort: { month: -1 } },
+        { $limit: 6 },
+        { $sort: { month: 1 } },
+      ]),
+    ]);
 
     return { usersByRole, planDistribution, revenueByStatus, paymentsByMethod, monthlyRevenue };
   }
@@ -223,7 +228,13 @@ class AdminService {
       bio,
     });
 
-    this.logAudit({ action: 'create_trainer', targetModel: 'trainers', targetId: trainer.id, metadata: { userId }, req });
+    this.logAudit({
+      action: 'create_trainer',
+      targetModel: 'trainers',
+      targetId: trainer.id,
+      metadata: { userId },
+      req,
+    });
     return trainer;
   }
 
@@ -243,13 +254,15 @@ class AdminService {
     if (!ticket) throw AppError.notFound('Ticket');
 
     if (assignedTo) {
-      this.repos.notification.create({
-        user: assignedTo,
-        title: 'Ticket Assigned',
-        message: `You have been assigned ticket: ${ticket.title}`,
-        type: 'info',
-        link: '/support',
-      }).catch(() => {});
+      this.repos.notification
+        .create({
+          user: assignedTo,
+          title: 'Ticket Assigned',
+          message: `You have been assigned ticket: ${ticket.title}`,
+          type: 'info',
+          link: '/support',
+        })
+        .catch(() => {});
     }
 
     return ticket;
@@ -275,12 +288,14 @@ class AdminService {
     if (!isInternal) {
       const ticket = await this.repos.supportTicket.findById(ticketId);
       if (ticket) {
-        this.repos.notification.create({
-          user: ticket.user,
-          title: 'New reply on your ticket',
-          message: `Your ticket "${ticket.title}" received a new reply.`,
-          type: 'info',
-        }).catch(() => {});
+        this.repos.notification
+          .create({
+            user: ticket.user,
+            title: 'New reply on your ticket',
+            message: `Your ticket "${ticket.title}" received a new reply.`,
+            type: 'info',
+          })
+          .catch(() => {});
       }
     }
 
@@ -290,14 +305,13 @@ class AdminService {
   /* ═══════════════ MEMBER STATS ═══════════════ */
 
   async getMemberStats(userId) {
-    const [attendanceCount, invoiceCount, progressCount, ticketCount, latestProgress] =
-      await Promise.all([
-        this.repos.attendance.count({ user: userId }),
-        this.repos.invoice.count({ user: userId }),
-        this.repos.memberProgress.count({ user: userId }),
-        this.repos.supportTicket.count({ user: userId }),
-        this.repos.memberProgress.findOne({ user: userId }, { sort: { recordDate: -1 } }),
-      ]);
+    const [attendanceCount, invoiceCount, progressCount, ticketCount, latestProgress] = await Promise.all([
+      this.repos.attendance.count({ user: userId }),
+      this.repos.invoice.count({ user: userId }),
+      this.repos.memberProgress.count({ user: userId }),
+      this.repos.supportTicket.count({ user: userId }),
+      this.repos.memberProgress.findOne({ user: userId }, { sort: { recordDate: -1 } }),
+    ]);
     return { attendanceCount, invoiceCount, progressCount, ticketCount, latestProgress };
   }
 
@@ -308,9 +322,18 @@ class AdminService {
     if (!userId || !title || !message) throw AppError.badRequest('userId, title, and message are required');
 
     const notification = await this.repos.notification.create({
-      user: userId, title, message, type: type || 'info',
+      user: userId,
+      title,
+      message,
+      type: type || 'info',
     });
-    this.logAudit({ action: 'send_notification', targetModel: 'notifications', targetId: notification.id, metadata: { userId }, req });
+    this.logAudit({
+      action: 'send_notification',
+      targetModel: 'notifications',
+      targetId: notification.id,
+      metadata: { userId },
+      req,
+    });
     return notification;
   }
 

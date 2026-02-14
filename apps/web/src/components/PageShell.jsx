@@ -20,12 +20,7 @@ const itemVariants = {
 
 export default function PageShell({ title, subtitle, right, children }) {
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className="space-y-5 sm:space-y-6"
-    >
+    <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-5 sm:space-y-6">
       <motion.div
         variants={itemVariants}
         className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4"

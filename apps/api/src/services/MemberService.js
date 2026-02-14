@@ -66,7 +66,8 @@ class MemberService {
     const [rows, total] = await Promise.all([
       this.repos.invoice.find(filter, {
         sort: { issueDate: -1 },
-        skip, limit,
+        skip,
+        limit,
         populate: { path: 'membershipPlan', select: 'name' },
       }),
       this.repos.invoice.count(filter),
@@ -91,13 +92,21 @@ class MemberService {
     const recordDate = data.recordDate ? new Date(data.recordDate) : new Date();
     const userDoc = await this.repos.user.findById(userId, { select: 'heightCm' });
     const heightCm = userDoc?.heightCm || 170;
-    const bmi = weightKg ? +(weightKg / ((heightCm / 100) ** 2)).toFixed(2) : undefined;
+    const bmi = weightKg ? +(weightKg / (heightCm / 100) ** 2).toFixed(2) : undefined;
 
     return this.repos.memberProgress.create({
-      user: userId, recordDate,
-      weightKg, bodyFatPercentage, muscleMassKg,
-      chestCm, waistCm, hipsCm, bicepsCm, thighsCm,
-      bmi, notes,
+      user: userId,
+      recordDate,
+      weightKg,
+      bodyFatPercentage,
+      muscleMassKg,
+      chestCm,
+      waistCm,
+      hipsCm,
+      bicepsCm,
+      thighsCm,
+      bmi,
+      notes,
     });
   }
 
@@ -105,7 +114,8 @@ class MemberService {
 
   async updateProfile(userId, data) {
     const u = await this.repos.user.update(userId, data, {
-      select: 'username email role name phone address fitnessGoals medicalConditions timezone emergencyContact emergencyPhone heightCm weightKg dateOfBirth gender avatarUrl',
+      select:
+        'username email role name phone address fitnessGoals medicalConditions timezone emergencyContact emergencyPhone heightCm weightKg dateOfBirth gender avatarUrl',
     });
     if (!u) throw AppError.notFound('User');
     return u;
@@ -130,7 +140,8 @@ class MemberService {
     const [rows, total] = await Promise.all([
       this.repos.classSchedule.find(filter, {
         sort: { classDate: 1, startTime: 1 },
-        skip, limit,
+        skip,
+        limit,
         populate: {
           path: 'fitnessClass',
           populate: { path: 'trainer', populate: { path: 'user', select: 'name' } },
@@ -156,7 +167,8 @@ class MemberService {
     const [rows, total] = await Promise.all([
       this.repos.classRegistration.find(filter, {
         sort: { registrationDate: -1 },
-        skip, limit,
+        skip,
+        limit,
         populate: {
           path: 'classSchedule',
           populate: { path: 'fitnessClass', select: 'name category durationMinutes' },
@@ -239,7 +251,8 @@ class MemberService {
     const [rows, total] = await Promise.all([
       this.repos.supportTicket.find(filter, {
         sort: { createdAt: -1 },
-        skip, limit,
+        skip,
+        limit,
         populate: [
           { path: 'category', select: 'name' },
           { path: 'assignedTo', select: 'name' },
@@ -260,7 +273,8 @@ class MemberService {
     return this.repos.supportTicket.create({
       user: userId,
       category: categoryId || undefined,
-      title, message,
+      title,
+      message,
       priority: priority || 'medium',
       status: 'open',
     });
@@ -277,10 +291,7 @@ class MemberService {
   }
 
   async addTicketReply(userId, ticketId, { message }) {
-    const ticket = await this.repos.supportTicket.findOne(
-      { _id: ticketId, user: userId },
-      { lean: false },
-    );
+    const ticket = await this.repos.supportTicket.findOne({ _id: ticketId, user: userId }, { lean: false });
     if (!ticket) throw AppError.notFound('Ticket');
 
     const reply = await this.repos.ticketReply.create({
@@ -315,10 +326,7 @@ class MemberService {
   }
 
   async markNotificationRead(userId, notificationId) {
-    const n = await this.repos.notification.updateOne(
-      { _id: notificationId, user: userId },
-      { read: true },
-    );
+    const n = await this.repos.notification.updateOne({ _id: notificationId, user: userId }, { read: true });
     if (!n) throw AppError.notFound('Notification');
     return n;
   }

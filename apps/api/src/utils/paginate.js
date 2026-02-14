@@ -23,9 +23,9 @@ const MAX_LIMIT = 200;
 const DEFAULT_LIMIT = 50;
 
 function paginationParams(req) {
-  const page  = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
   const limit = Math.min(MAX_LIMIT, Math.max(1, parseInt(req.query.limit, 10) || DEFAULT_LIMIT));
-  const skip  = (page - 1) * limit;
+  const skip = (page - 1) * limit;
   return { page, limit, skip };
 }
 

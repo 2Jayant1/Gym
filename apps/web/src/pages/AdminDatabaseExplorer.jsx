@@ -70,7 +70,6 @@ export default function AdminDatabaseExplorer() {
 
   useEffect(() => {
     loadRows(selectedTable);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTable]);
 
   const columns = useMemo(() => {
@@ -86,8 +85,8 @@ export default function AdminDatabaseExplorer() {
       Object.values(r).some((v) =>
         String(v ?? '')
           .toLowerCase()
-          .includes(q)
-      )
+          .includes(q),
+      ),
     );
   }, [rows, filter]);
 
@@ -120,15 +119,18 @@ export default function AdminDatabaseExplorer() {
       ) : null}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        <motion.div className="lg:col-span-4 card p-0 overflow-hidden" initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
+        <motion.div
+          className="lg:col-span-4 card p-0 overflow-hidden"
+          initial={{ opacity: 0, x: -12 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3 }}
+        >
           <div className="p-4 border-b border-slate-200 flex items-center justify-between">
             <div className="text-slate-700 font-bold flex items-center gap-2">
               <Table2 className="h-4 w-4 text-slate-600" />
               Tables
             </div>
-            <div className="text-slate-500 text-xs">
-              {loadingTables ? 'Loading…' : `${tables.length} total`}
-            </div>
+            <div className="text-slate-500 text-xs">{loadingTables ? 'Loading…' : `${tables.length} total`}</div>
           </div>
 
           <div className="max-h-[520px] overflow-auto">
@@ -140,14 +142,12 @@ export default function AdminDatabaseExplorer() {
                   onClick={() => setSelectedTable(t.table)}
                   className={classNames(
                     'w-full text-left px-4 py-3 border-b border-slate-100 hover:bg-slate-50 transition-colors',
-                    active ? 'bg-slate-50' : ''
+                    active ? 'bg-slate-50' : '',
                   )}
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-slate-800 font-semibold">{t.table}</div>
-                    <div className="text-slate-500 text-xs tabular-nums">
-                      {t.error ? '—' : t.count}
-                    </div>
+                    <div className="text-slate-500 text-xs tabular-nums">{t.error ? '—' : t.count}</div>
                   </div>
                   {t.error ? <div className="text-red-600/80 text-xs mt-1">{t.error}</div> : null}
                 </button>
@@ -196,10 +196,7 @@ export default function AdminDatabaseExplorer() {
                   <thead className="bg-slate-50">
                     <tr>
                       {columns.map((c) => (
-                        <th
-                          key={c}
-                          className="text-left text-slate-600 font-semibold px-3 py-2 whitespace-nowrap"
-                        >
+                        <th key={c} className="text-left text-slate-600 font-semibold px-3 py-2 whitespace-nowrap">
                           {c}
                         </th>
                       ))}
@@ -207,10 +204,7 @@ export default function AdminDatabaseExplorer() {
                   </thead>
                   <tbody>
                     {filteredRows.slice(0, 200).map((r, idx) => (
-                      <tr
-                        key={idx}
-                        className="border-t border-slate-100 hover:bg-slate-50 transition-colors"
-                      >
+                      <tr key={idx} className="border-t border-slate-100 hover:bg-slate-50 transition-colors">
                         {columns.map((c) => (
                           <td key={c} className="px-3 py-2 text-slate-700 whitespace-nowrap">
                             {formatCell(r[c])}

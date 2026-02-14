@@ -20,7 +20,9 @@ function PortalParticles() {
       'rgba(244,63,94,0.12)',
     ];
 
-    const onMouseMove = (e) => { mouseRef.current = { x: e.clientX, y: e.clientY }; };
+    const onMouseMove = (e) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+    };
     window.addEventListener('mousemove', onMouseMove, { passive: true });
 
     function resize() {
@@ -58,10 +60,10 @@ function PortalParticles() {
         const dmy = p.y - my;
         const distM = Math.sqrt(dmx * dmx + dmy * dmy);
         if (distM < 180) {
-          const force = (180 - distM) / 180 * 0.4;
-          p.x += dmx / distM * force;
-          p.y += dmy / distM * force;
-          p.r = p.baseR + (180 - distM) / 180 * 2; // grow near cursor
+          const force = ((180 - distM) / 180) * 0.4;
+          p.x += (dmx / distM) * force;
+          p.y += (dmy / distM) * force;
+          p.r = p.baseR + ((180 - distM) / 180) * 2; // grow near cursor
         } else {
           p.r += (p.baseR - p.r) * 0.05;
         }
@@ -108,11 +110,7 @@ function PortalParticles() {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 w-full h-full pointer-events-none z-0"
-      style={{ opacity: 0.6 }}
-    />
+    <canvas ref={canvasRef} className="fixed inset-0 w-full h-full pointer-events-none z-0" style={{ opacity: 0.6 }} />
   );
 }
 
@@ -153,8 +151,7 @@ function PortalGlowCursor() {
       style={{
         width: 500,
         height: 500,
-        background:
-          'radial-gradient(circle, rgba(99,102,241,0.06) 0%, rgba(14,165,233,0.03) 35%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(99,102,241,0.06) 0%, rgba(14,165,233,0.03) 35%, transparent 70%)',
         borderRadius: '50%',
         willChange: 'transform',
       }}

@@ -23,36 +23,41 @@ const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 const path = require('path');
 
-const config       = require('./src/config/env');
-const logger       = require('./src/config/logger');
+const config = require('./src/config/env');
+const logger = require('./src/config/logger');
 const featureFlags = require('./src/config/featureFlags');
-const { initSentry, captureException, requestHandler: sentryRequestHandler, errorHandler: sentryErrorHandler } = require('./src/config/sentry');
+const {
+  initSentry,
+  captureException,
+  requestHandler: sentryRequestHandler,
+  errorHandler: sentryErrorHandler,
+} = require('./src/config/sentry');
 const { connectDb } = require('./src/db/mongoose');
-const models       = require('./src/models');
+const models = require('./src/models');
 const { seedIfEmpty } = require('./src/seed/seed.mongo');
 
 // Architecture layers
 const createRepositories = require('./src/repositories');
-const createServices     = require('./src/services');
+const createServices = require('./src/services');
 
 // Middleware
 const { requireAuth, requireRole } = require('./src/middleware/auth');
-const requestId      = require('./src/middleware/requestId');
+const requestId = require('./src/middleware/requestId');
 const requestTimeout = require('./src/middleware/requestTimeout');
 const createMetricsMiddleware = require('./src/middleware/metrics');
-const { AppError }   = require('./src/utils/AppError');
+const { AppError } = require('./src/utils/AppError');
 
 // Initialise Sentry (no-op if SENTRY_DSN is unset or @sentry/node not installed)
 initSentry(config);
 
 // Routes
-const coreRoutes    = require('./src/routes/core');
-const adminRoutes   = require('./src/routes/admin');
+const coreRoutes = require('./src/routes/core');
+const adminRoutes = require('./src/routes/admin');
 const trainerRoutes = require('./src/routes/trainer');
-const meRoutes      = require('./src/routes/me');
+const meRoutes = require('./src/routes/me');
 
 /* ─── Initialize Repository → Service layers ─────────── */
-const repos    = createRepositories(models);
+const repos = createRepositories(models);
 const services = createServices({ repos, config, models });
 
 const app = express();
@@ -84,9 +89,7 @@ app.use(helmet());
 // CORS — locked to configured origin(s)
 app.use(
   cors({
-    origin: config.CORS_ORIGIN === '*'
-      ? true
-      : config.CORS_ORIGIN.split(',').map((v) => v.trim()),
+    origin: config.CORS_ORIGIN === '*' ? true : config.CORS_ORIGIN.split(',').map((v) => v.trim()),
     credentials: true,
   }),
 );
@@ -134,12 +137,14 @@ const authLimiter = rateLimit({
 
 // Pipe Morgan HTTP logs through Winston (include request ID)
 const morganStream = { write: (msg) => logger.http(msg.trim()) };
-app.use(morgan(
-  config.NODE_ENV === 'production'
-    ? ':remote-addr :method :url :status :res[content-length] - :response-time ms'
-    : 'dev',
-  { stream: morganStream },
-));
+app.use(
+  morgan(
+    config.NODE_ENV === 'production'
+      ? ':remote-addr :method :url :status :res[content-length] - :response-time ms'
+      : 'dev',
+    { stream: morganStream },
+  ),
+);
 
 /* ═══════════════════════════════════════════════════════════════
    HEALTH CHECK  (deep — pings the DB + reports feature flags)
@@ -178,9 +183,9 @@ app.use(
   }),
 );
 
-app.use('/api/admin',   adminRoutes({ services, models, requireAuth: authMw, requireRole }));
+app.use('/api/admin', adminRoutes({ services, models, requireAuth: authMw, requireRole }));
 app.use('/api/trainer', trainerRoutes({ services, requireAuth: authMw, requireRole }));
-app.use('/api/me',      meRoutes({ services, requireAuth: authMw }));
+app.use('/api/me', meRoutes({ services, requireAuth: authMw }));
 
 /* ═══════════════════════════════════════════════════════════════
    FRONTEND STATIC (production)
@@ -199,12 +204,17 @@ if (config.NODE_ENV === 'production') {
 /* ─── Dev-only reseed endpoint ──────────────────────────────── */
 if (config.NODE_ENV === 'development') {
   const { asyncHandler } = require('./src/utils/AppError');
-  app.post('/api/dev/reseed', authMw, requireRole(['admin']), asyncHandler(async (_req, res) => {
-    const collections = await mongoose.connection.db.collections();
-    for (const c of collections) await c.deleteMany({});
-    await seedIfEmpty(models);
-    res.json({ ok: true, message: 'Database reseeded successfully' });
-  }));
+  app.post(
+    '/api/dev/reseed',
+    authMw,
+    requireRole(['admin']),
+    asyncHandler(async (_req, res) => {
+      const collections = await mongoose.connection.db.collections();
+      for (const c of collections) await c.deleteMany({});
+      await seedIfEmpty(models);
+      res.json({ ok: true, message: 'Database reseeded successfully' });
+    }),
+  );
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -308,7 +318,9 @@ function gracefulShutdown(signal) {
     try {
       await mongoose.connection.close();
       logger.info('MongoDB connection closed.');
-    } catch { /* swallow */ }
+    } catch {
+      /* swallow */
+    }
     process.exit(0);
   });
 
@@ -320,7 +332,7 @@ function gracefulShutdown(signal) {
 }
 
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
-process.on('SIGINT',  () => gracefulShutdown('SIGINT'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 // Catch unhandled rejections/exceptions — log and exit
 process.on('unhandledRejection', (reason) => {

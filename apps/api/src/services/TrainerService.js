@@ -21,7 +21,8 @@ class TrainerService {
     const [rows, total] = await Promise.all([
       this.repos.trainingSession.find(filter, {
         sort: { sessionDate: -1, startTime: -1 },
-        skip, limit,
+        skip,
+        limit,
         populate: { path: 'user', select: 'name email' },
       }),
       this.repos.trainingSession.count(filter),
@@ -39,7 +40,8 @@ class TrainerService {
       trainer: trainerId,
       user: userId,
       sessionDate: new Date(sessionDate),
-      startTime, endTime,
+      startTime,
+      endTime,
       durationMinutes: Number(durationMinutes),
       sessionType,
       status: status || 'scheduled',
@@ -54,10 +56,7 @@ class TrainerService {
     if (payload.durationMinutes) payload.durationMinutes = Number(payload.durationMinutes);
     if (payload.cost) payload.cost = Number(payload.cost);
 
-    const row = await this.repos.trainingSession.updateOne(
-      { _id: sessionId, trainer: trainerId },
-      payload,
-    );
+    const row = await this.repos.trainingSession.updateOne({ _id: sessionId, trainer: trainerId }, payload);
     if (!row) throw AppError.notFound('Session');
     return row;
   }
@@ -83,11 +82,13 @@ class TrainerService {
     const { name, description, maxParticipants, durationMinutes, difficultyLevel, category, status } = data;
     if (!name || !durationMinutes) throw AppError.badRequest('name and durationMinutes are required');
     return this.repos.fitnessClass.create({
-      name, description,
+      name,
+      description,
       trainer: trainerId,
       maxParticipants: maxParticipants ? Number(maxParticipants) : undefined,
       durationMinutes: Number(durationMinutes),
-      difficultyLevel, category,
+      difficultyLevel,
+      category,
       status: status || 'active',
     });
   }
@@ -97,10 +98,7 @@ class TrainerService {
     if (payload.maxParticipants) payload.maxParticipants = Number(payload.maxParticipants);
     if (payload.durationMinutes) payload.durationMinutes = Number(payload.durationMinutes);
 
-    const row = await this.repos.fitnessClass.updateOne(
-      { _id: classId, trainer: trainerId },
-      payload,
-    );
+    const row = await this.repos.fitnessClass.updateOne({ _id: classId, trainer: trainerId }, payload);
     if (!row) throw AppError.notFound('Class');
     return row;
   }
@@ -116,10 +114,7 @@ class TrainerService {
   async listSchedules(trainerId, classId) {
     const cls = await this.repos.fitnessClass.findOne({ _id: classId, trainer: trainerId });
     if (!cls) throw AppError.notFound('Class');
-    return this.repos.classSchedule.find(
-      { fitnessClass: classId },
-      { sort: { classDate: 1, startTime: 1 } },
-    );
+    return this.repos.classSchedule.find({ fitnessClass: classId }, { sort: { classDate: 1, startTime: 1 } });
   }
 
   async createSchedule(trainerId, classId, data) {
@@ -130,7 +125,9 @@ class TrainerService {
     return this.repos.classSchedule.create({
       fitnessClass: classId,
       classDate: new Date(classDate),
-      startTime, endTime, room,
+      startTime,
+      endTime,
+      room,
     });
   }
 
@@ -159,10 +156,7 @@ class TrainerService {
 
   async listMembers(trainerId) {
     const userIds = await this.repos.trainingSession.distinct('user', { trainer: trainerId });
-    return this.repos.user.find(
-      { _id: { $in: userIds } },
-      { select: 'name email phone fitnessGoals status' },
-    );
+    return this.repos.user.find({ _id: { $in: userIds } }, { select: 'name email phone fitnessGoals status' });
   }
 }
 

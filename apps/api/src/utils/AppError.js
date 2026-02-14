@@ -12,17 +12,29 @@ class AppError extends Error {
   constructor(message, statusCode = 500) {
     super(message);
     this.statusCode = statusCode;
-    this.isOperational = true;          // distinguishes from programming bugs
+    this.isOperational = true; // distinguishes from programming bugs
     Error.captureStackTrace(this, this.constructor);
   }
 
   /* ── Convenience factories ─────────────────────────── */
-  static badRequest(msg = 'Bad request')       { return new AppError(msg, 400); }
-  static unauthorized(msg = 'Unauthorized')    { return new AppError(msg, 401); }
-  static forbidden(msg = 'Forbidden')          { return new AppError(msg, 403); }
-  static notFound(resource = 'Resource')       { return new AppError(`${resource} not found`, 404); }
-  static conflict(msg = 'Conflict')            { return new AppError(msg, 409); }
-  static tooMany(msg = 'Too many requests')    { return new AppError(msg, 429); }
+  static badRequest(msg = 'Bad request') {
+    return new AppError(msg, 400);
+  }
+  static unauthorized(msg = 'Unauthorized') {
+    return new AppError(msg, 401);
+  }
+  static forbidden(msg = 'Forbidden') {
+    return new AppError(msg, 403);
+  }
+  static notFound(resource = 'Resource') {
+    return new AppError(`${resource} not found`, 404);
+  }
+  static conflict(msg = 'Conflict') {
+    return new AppError(msg, 409);
+  }
+  static tooMany(msg = 'Too many requests') {
+    return new AppError(msg, 429);
+  }
 }
 
 /**

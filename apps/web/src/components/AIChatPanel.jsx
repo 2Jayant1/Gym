@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Send, Bot, User, Loader2, Sparkles, RefreshCw, Trash2, AlertCircle,
-} from 'lucide-react';
+import { Send, Bot, User, Loader2, Sparkles, RefreshCw, Trash2, AlertCircle } from 'lucide-react';
 
 const ML_BASE = '/ml';
 const AUTH_STORAGE_KEY = 'gms.auth';
@@ -35,15 +33,14 @@ function ChatBubble({ role, content, isStreaming }) {
       )}
       <div
         className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap
-          ${isUser
-            ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-br-md shadow-lg'
-            : 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-bl-md shadow'
+          ${
+            isUser
+              ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-br-md shadow-lg'
+              : 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-bl-md shadow'
           }`}
       >
         {content}
-        {isStreaming && (
-          <span className="inline-block w-1.5 h-4 ml-0.5 bg-indigo-400 animate-pulse rounded-sm" />
-        )}
+        {isStreaming && <span className="inline-block w-1.5 h-4 ml-0.5 bg-indigo-400 animate-pulse rounded-sm" />}
       </div>
       {isUser && (
         <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shadow-lg">
@@ -98,118 +95,125 @@ export default function AIChatPanel({ sessionId = 'default', className = '' }) {
   }, []);
 
   /* ─── Send message (streaming via SSE) ────────────────────── */
-  const sendMessage = useCallback(async (text) => {
-    const msg = (text || input).trim();
-    if (!msg || isStreaming) return;
-    setInput('');
-    setError(null);
+  const sendMessage = useCallback(
+    async (text) => {
+      const msg = (text || input).trim();
+      if (!msg || isStreaming) return;
+      setInput('');
+      setError(null);
 
-    // Add user message
-    setMessages((prev) => [...prev, { role: 'user', content: msg }]);
+      // Add user message
+      setMessages((prev) => [...prev, { role: 'user', content: msg }]);
 
-    // Add placeholder for AI response
-    setMessages((prev) => [...prev, { role: 'assistant', content: '', streaming: true }]);
-    setIsStreaming(true);
+      // Add placeholder for AI response
+      setMessages((prev) => [...prev, { role: 'assistant', content: '', streaming: true }]);
+      setIsStreaming(true);
 
-    try {
-      const token = getTokenFromStorage();
-      const response = await fetch(`${ML_BASE}/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify({ message: msg, session_id: sessionId, stream: true }),
-      });
-
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        throw new Error(errData.detail || `HTTP ${response.status}`);
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let accum = '';
-      let buffer = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-
-        // Parse SSE lines
-        const lines = buffer.split('\n');
-        buffer = lines.pop() || ''; // keep incomplete line in buffer
-
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            const payload = line.slice(6).trim();
-            if (payload === '[DONE]') continue;
-            try {
-              const parsed = JSON.parse(payload);
-              if (parsed.token) {
-                accum += parsed.token;
-                setMessages((prev) => {
-                  const updated = [...prev];
-                  updated[updated.length - 1] = { role: 'assistant', content: accum, streaming: true };
-                  return updated;
-                });
-              }
-              if (parsed.error) {
-                throw new Error(parsed.error);
-              }
-            } catch {
-              // non-JSON SSE line (e.g. keep-alive)
-            }
-          }
-        }
-      }
-
-      // Finalize the AI message
-      setMessages((prev) => {
-        const updated = [...prev];
-        updated[updated.length - 1] = { role: 'assistant', content: accum || 'No response received.', streaming: false };
-        return updated;
-      });
-    } catch (e) {
-      // If streaming fails, try non-streaming fallback
       try {
-        const token2 = getTokenFromStorage();
-        const resp = await fetch(`${ML_BASE}/chat`, {
+        const token = getTokenFromStorage();
+        const response = await fetch(`${ML_BASE}/chat`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            ...(token2 ? { Authorization: `Bearer ${token2}` } : {}),
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
-          body: JSON.stringify({ message: msg, session_id: sessionId, stream: false }),
+          body: JSON.stringify({ message: msg, session_id: sessionId, stream: true }),
         });
-        if (resp.ok) {
-          const data = await resp.json();
-          setMessages((prev) => {
-            const updated = [...prev];
-            updated[updated.length - 1] = { role: 'assistant', content: data.response, streaming: false };
-            return updated;
-          });
-        } else {
-          throw e;
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.detail || `HTTP ${response.status}`);
         }
-      } catch {
-        setError(e.message || 'Failed to connect to AI service');
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let accum = '';
+        let buffer = '';
+
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+
+          // Parse SSE lines
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || ''; // keep incomplete line in buffer
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const payload = line.slice(6).trim();
+              if (payload === '[DONE]') continue;
+              try {
+                const parsed = JSON.parse(payload);
+                if (parsed.token) {
+                  accum += parsed.token;
+                  setMessages((prev) => {
+                    const updated = [...prev];
+                    updated[updated.length - 1] = { role: 'assistant', content: accum, streaming: true };
+                    return updated;
+                  });
+                }
+                if (parsed.error) {
+                  throw new Error(parsed.error);
+                }
+              } catch {
+                // non-JSON SSE line (e.g. keep-alive)
+              }
+            }
+          }
+        }
+
+        // Finalize the AI message
         setMessages((prev) => {
           const updated = [...prev];
           updated[updated.length - 1] = {
             role: 'assistant',
-            content: `Sorry, I couldn't process that request. ${e.message || 'Please check that the ML service and Ollama are running.'}`,
+            content: accum || 'No response received.',
             streaming: false,
           };
           return updated;
         });
+      } catch (e) {
+        // If streaming fails, try non-streaming fallback
+        try {
+          const token2 = getTokenFromStorage();
+          const resp = await fetch(`${ML_BASE}/chat`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token2 ? { Authorization: `Bearer ${token2}` } : {}),
+            },
+            body: JSON.stringify({ message: msg, session_id: sessionId, stream: false }),
+          });
+          if (resp.ok) {
+            const data = await resp.json();
+            setMessages((prev) => {
+              const updated = [...prev];
+              updated[updated.length - 1] = { role: 'assistant', content: data.response, streaming: false };
+              return updated;
+            });
+          } else {
+            throw e;
+          }
+        } catch {
+          setError(e.message || 'Failed to connect to AI service');
+          setMessages((prev) => {
+            const updated = [...prev];
+            updated[updated.length - 1] = {
+              role: 'assistant',
+              content: `Sorry, I couldn't process that request. ${e.message || 'Please check that the ML service and Ollama are running.'}`,
+              streaming: false,
+            };
+            return updated;
+          });
+        }
+      } finally {
+        setIsStreaming(false);
+        inputRef.current?.focus();
       }
-    } finally {
-      setIsStreaming(false);
-      inputRef.current?.focus();
-    }
-  }, [input, isStreaming, sessionId]);
+    },
+    [input, isStreaming, sessionId],
+  );
 
   /* ─── Clear chat ──────────────────────────────────────────── */
   const clearChat = useCallback(async () => {
@@ -235,7 +239,9 @@ export default function AIChatPanel({ sessionId = 'default', className = '' }) {
   };
 
   return (
-    <div className={`flex flex-col bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden ${className}`}>
+    <div
+      className={`flex flex-col bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden ${className}`}
+    >
       {/* ─── Header ──────────────────────────────────────────── */}
       <div className="flex items-center justify-between px-5 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
         <div className="flex items-center gap-2">
@@ -244,17 +250,11 @@ export default function AIChatPanel({ sessionId = 'default', className = '' }) {
           </div>
           <div>
             <h3 className="font-bold text-sm">FitFlex AI</h3>
-            <p className="text-[10px] opacity-80">
-              {isStreaming ? 'Thinking...' : 'RAG-powered fitness assistant'}
-            </p>
+            <p className="text-[10px] opacity-80">{isStreaming ? 'Thinking...' : 'RAG-powered fitness assistant'}</p>
           </div>
         </div>
         <div className="flex gap-1">
-          <button
-            onClick={clearChat}
-            className="p-1.5 rounded-lg hover:bg-white/20 transition"
-            title="Clear chat"
-          >
+          <button onClick={clearChat} className="p-1.5 rounded-lg hover:bg-white/20 transition" title="Clear chat">
             <Trash2 size={14} />
           </button>
         </div>
@@ -269,7 +269,7 @@ export default function AIChatPanel({ sessionId = 'default', className = '' }) {
             </div>
             <h4 className="font-semibold text-slate-700 mb-1">Ask FitFlex AI anything</h4>
             <p className="text-xs text-slate-400 mb-4">
-              I'm trained on your gym's data — workouts, members, performance, and more.
+              I&apos;m trained on your gym&apos;s data — workouts, members, performance, and more.
             </p>
             {suggestions.length > 0 && (
               <div className="flex flex-wrap justify-center gap-2">
@@ -283,12 +283,7 @@ export default function AIChatPanel({ sessionId = 'default', className = '' }) {
 
         <AnimatePresence>
           {messages.map((msg, i) => (
-            <ChatBubble
-              key={i}
-              role={msg.role}
-              content={msg.content}
-              isStreaming={msg.streaming}
-            />
+            <ChatBubble key={i} role={msg.role} content={msg.content} isStreaming={msg.streaming} />
           ))}
         </AnimatePresence>
 

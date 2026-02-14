@@ -44,7 +44,7 @@ ml.interceptors.response.use(
       _onUnauthorized();
     }
     return Promise.reject(err);
-  }
+  },
 );
 
 /* ─── Health ──────────────────────────────────────────── */

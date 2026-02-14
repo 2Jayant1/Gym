@@ -89,9 +89,9 @@ describe('AuthService', () => {
 
     it('should throw on invalid user', async () => {
       repos.user.findOne.mockResolvedValue(null);
-      await expect(
-        authService.login({ email: 'nope@example.com', password: 'Password1' }),
-      ).rejects.toThrow('Invalid credentials');
+      await expect(authService.login({ email: 'nope@example.com', password: 'Password1' })).rejects.toThrow(
+        'Invalid credentials',
+      );
     });
 
     it('should throw on wrong password', async () => {
@@ -99,9 +99,9 @@ describe('AuthService', () => {
       const mockUser = buildUser({ password: hashedPw });
       repos.user.findOne.mockResolvedValue(mockUser);
 
-      await expect(
-        authService.login({ email: 'test@example.com', password: 'WrongPass1' }),
-      ).rejects.toThrow('Invalid credentials');
+      await expect(authService.login({ email: 'test@example.com', password: 'WrongPass1' })).rejects.toThrow(
+        'Invalid credentials',
+      );
     });
   });
 
@@ -118,11 +118,13 @@ describe('AuthService', () => {
     it('should register a new user successfully', async () => {
       repos.user.findOne.mockResolvedValue(null); // no existing user
       repos.membershipPlan.findOne.mockResolvedValue({ _id: 'plan-1' });
-      repos.user.create.mockResolvedValue(buildUser({
-        name: 'New User',
-        username: 'newuser',
-        email: 'new@example.com',
-      }));
+      repos.user.create.mockResolvedValue(
+        buildUser({
+          name: 'New User',
+          username: 'newuser',
+          email: 'new@example.com',
+        }),
+      );
       repos.notification.create.mockResolvedValue({});
 
       const result = await authService.register(validData);
@@ -150,10 +152,19 @@ describe('AuthService', () => {
 
   describe('refresh', () => {
     it('should return new tokens with a valid refresh token', async () => {
-      const refreshToken = authService.signRefreshToken({ id: 'user-id-1', tokenFamily: 'abc' });
+      const tokenFamily = 'family-1';
+      const refreshToken = authService.signRefreshToken({ id: 'user-id-1', tokenFamily, jti: 'jti-1' });
+      const tokenHash = authService.hashToken(refreshToken);
+      repos.refreshToken.findOne.mockResolvedValue({
+        _id: 'rt-1',
+        user: 'user-id-1',
+        tokenFamily,
+        tokenHash,
+        expiresAt: new Date(Date.now() + 3600_000),
+      });
       repos.user.findById.mockResolvedValue(buildUser());
 
-      const result = await authService.refresh(refreshToken);
+      const result = await authService.refresh(refreshToken, { ip: '1.1.1.1', userAgent: 'jest' });
 
       expect(result).toHaveProperty('token');
       expect(result).toHaveProperty('refreshToken');
@@ -165,7 +176,15 @@ describe('AuthService', () => {
     });
 
     it('should throw on suspended account', async () => {
-      const refreshToken = authService.signRefreshToken({ id: 'user-id-1', tokenFamily: 'abc' });
+      const refreshToken = authService.signRefreshToken({ id: 'user-id-1', tokenFamily: 'abc', jti: 'jti-1' });
+      const tokenHash = authService.hashToken(refreshToken);
+      repos.refreshToken.findOne.mockResolvedValue({
+        _id: 'rt-1',
+        user: 'user-id-1',
+        tokenFamily: 'abc',
+        tokenHash,
+        expiresAt: new Date(Date.now() + 3600_000),
+      });
       repos.user.findById.mockResolvedValue(buildUser({ status: 'suspended' }));
 
       await expect(authService.refresh(refreshToken)).rejects.toThrow('Account not found or suspended');

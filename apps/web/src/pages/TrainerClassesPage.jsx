@@ -5,7 +5,14 @@ import { useToast } from '../components/ToastContext';
 import api from '../services/api';
 import { motion } from 'framer-motion';
 
-const emptyClass = { name: '', description: '', durationMinutes: 60, difficultyLevel: 'beginner', category: 'cardio', maxParticipants: 20 };
+const emptyClass = {
+  name: '',
+  description: '',
+  durationMinutes: 60,
+  difficultyLevel: 'beginner',
+  category: 'cardio',
+  maxParticipants: 20,
+};
 
 export default function TrainerClassesPage() {
   const [rows, setRows] = useState([]);
@@ -71,7 +78,7 @@ export default function TrainerClassesPage() {
     return rows.filter((r) =>
       [r.name, r.category, r.difficultyLevel, r.description, r.durationMinutes]
         .filter(Boolean)
-        .some((v) => String(v).toLowerCase().includes(s))
+        .some((v) => String(v).toLowerCase().includes(s)),
     );
   }, [rows, q]);
 
@@ -87,12 +94,7 @@ export default function TrainerClassesPage() {
           </button>
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search…"
-              className="input pl-9"
-            />
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search…" className="input pl-9" />
           </div>
           <button onClick={load} className="btn-ghost" title="Refresh">
             <RefreshCcw className={loading ? 'h-4 w-4 animate-spin' : 'h-4 w-4'} />
@@ -105,10 +107,22 @@ export default function TrainerClassesPage() {
         <div className="card">
           <div className="text-slate-800 font-semibold mb-3">Create Class</div>
           <form onSubmit={handleCreate} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div><label className="label">Name</label><input className="input" value={form.name} onChange={(e) => setForm((s) => ({ ...s, name: e.target.value }))} required /></div>
+            <div>
+              <label className="label">Name</label>
+              <input
+                className="input"
+                value={form.name}
+                onChange={(e) => setForm((s) => ({ ...s, name: e.target.value }))}
+                required
+              />
+            </div>
             <div>
               <label className="label">Category</label>
-              <select className="input" value={form.category} onChange={(e) => setForm((s) => ({ ...s, category: e.target.value }))}>
+              <select
+                className="input"
+                value={form.category}
+                onChange={(e) => setForm((s) => ({ ...s, category: e.target.value }))}
+              >
                 <option value="cardio">Cardio</option>
                 <option value="strength">Strength</option>
                 <option value="yoga">Yoga</option>
@@ -118,18 +132,50 @@ export default function TrainerClassesPage() {
             </div>
             <div>
               <label className="label">Difficulty</label>
-              <select className="input" value={form.difficultyLevel} onChange={(e) => setForm((s) => ({ ...s, difficultyLevel: e.target.value }))}>
+              <select
+                className="input"
+                value={form.difficultyLevel}
+                onChange={(e) => setForm((s) => ({ ...s, difficultyLevel: e.target.value }))}
+              >
                 <option value="beginner">Beginner</option>
                 <option value="intermediate">Intermediate</option>
                 <option value="advanced">Advanced</option>
               </select>
             </div>
-            <div><label className="label">Duration (min)</label><input type="number" className="input" value={form.durationMinutes} onChange={(e) => setForm((s) => ({ ...s, durationMinutes: e.target.value }))} /></div>
-            <div><label className="label">Max Participants</label><input type="number" className="input" value={form.maxParticipants} onChange={(e) => setForm((s) => ({ ...s, maxParticipants: e.target.value }))} /></div>
-            <div className="md:col-span-2"><label className="label">Description</label><textarea className="input" rows={2} value={form.description} onChange={(e) => setForm((s) => ({ ...s, description: e.target.value }))} /></div>
+            <div>
+              <label className="label">Duration (min)</label>
+              <input
+                type="number"
+                className="input"
+                value={form.durationMinutes}
+                onChange={(e) => setForm((s) => ({ ...s, durationMinutes: e.target.value }))}
+              />
+            </div>
+            <div>
+              <label className="label">Max Participants</label>
+              <input
+                type="number"
+                className="input"
+                value={form.maxParticipants}
+                onChange={(e) => setForm((s) => ({ ...s, maxParticipants: e.target.value }))}
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="label">Description</label>
+              <textarea
+                className="input"
+                rows={2}
+                value={form.description}
+                onChange={(e) => setForm((s) => ({ ...s, description: e.target.value }))}
+              />
+            </div>
             <div className="md:col-span-2 lg:col-span-3 flex justify-end gap-2">
-              <button type="button" onClick={() => setShowForm(false)} className="btn-ghost">Cancel</button>
-              <button type="submit" disabled={busy} className="btn-primary">{busy ? 'Creating…' : 'Create Class'}</button>
+              <button type="button" onClick={() => setShowForm(false)} className="btn-ghost">
+                Cancel
+              </button>
+              <button type="submit" disabled={busy} className="btn-primary">
+                {busy ? 'Creating…' : 'Create Class'}
+              </button>
             </div>
           </form>
         </div>
@@ -140,9 +186,7 @@ export default function TrainerClassesPage() {
             <Dumbbell className="h-4 w-4 text-slate-600" />
             Classes
           </div>
-          <div className="text-slate-500 text-xs">
-            {loading ? 'Loading…' : `${filtered.length} shown`}
-          </div>
+          <div className="text-slate-500 text-xs">{loading ? 'Loading…' : `${filtered.length} shown`}</div>
         </div>
 
         {error ? <div className="p-4 text-red-600 text-sm">{error}</div> : null}
@@ -165,13 +209,14 @@ export default function TrainerClassesPage() {
                     <div className="text-slate-500 text-sm">
                       {c.category || 'Class'} • {c.difficultyLevel || 'All levels'} • {c.durationMinutes || '—'} min
                     </div>
-                    {c.description ? (
-                      <div className="text-slate-500 text-sm mt-2">{c.description}</div>
-                    ) : null}
+                    {c.description ? <div className="text-slate-500 text-sm mt-2">{c.description}</div> : null}
                   </div>
                   <div className="text-slate-400 text-xs flex items-center gap-2">
                     ID: {c.id}
-                    <button onClick={() => handleDelete(c.id || c._id)} className="text-rose-500 hover:text-rose-700 transition-colors ml-2">
+                    <button
+                      onClick={() => handleDelete(c.id || c._id)}
+                      className="text-rose-500 hover:text-rose-700 transition-colors ml-2"
+                    >
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </div>

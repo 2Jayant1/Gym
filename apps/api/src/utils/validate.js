@@ -9,15 +9,20 @@ const strongPassword = z
   .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
   .regex(/[0-9]/, 'Password must contain at least one digit');
 
-const loginSchema = z.object({
-  email: z.string().email().optional(),
-  username: z.string().min(2).optional(),
-  password: z.string().min(1, 'Password is required'),
-}).refine((d) => d.email || d.username, { message: 'email or username is required' });
+const loginSchema = z
+  .object({
+    email: z.string().email().optional(),
+    username: z.string().min(2).optional(),
+    password: z.string().min(1, 'Password is required'),
+  })
+  .refine((d) => d.email || d.username, { message: 'email or username is required' });
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(100),
-  username: z.string().min(3, 'Username must be at least 3 characters').max(30)
+  username: z
+    .string()
+    .min(3, 'Username must be at least 3 characters')
+    .max(30)
     .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, underscores'),
   email: z.string().email('Invalid email address').max(254),
   password: strongPassword,
@@ -72,17 +77,19 @@ const classCreateSchema = z.object({
 });
 
 // ─── Progress ────────────────────────────────────────────────
-const progressSchema = z.object({
-  weightKg: z.coerce.number().positive('weightKg must be positive').optional(),
-  bodyFatPercentage: z.coerce.number().min(0).max(100).optional(),
-  muscleMassKg: z.coerce.number().positive().optional(),
-  bmi: z.coerce.number().positive().optional(),
-  notes: z.string().max(1000).optional(),
-  measurements: z.record(z.coerce.number()).optional(),
-  recordedAt: z.string().optional(),
-}).refine((d) => d.weightKg || d.bodyFatPercentage || d.muscleMassKg || d.bmi || d.notes || d.measurements, {
-  message: 'At least one progress field is required',
-});
+const progressSchema = z
+  .object({
+    weightKg: z.coerce.number().positive('weightKg must be positive').optional(),
+    bodyFatPercentage: z.coerce.number().min(0).max(100).optional(),
+    muscleMassKg: z.coerce.number().positive().optional(),
+    bmi: z.coerce.number().positive().optional(),
+    notes: z.string().max(1000).optional(),
+    measurements: z.record(z.coerce.number()).optional(),
+    recordedAt: z.string().optional(),
+  })
+  .refine((d) => d.weightKg || d.bodyFatPercentage || d.muscleMassKg || d.bmi || d.notes || d.measurements, {
+    message: 'At least one progress field is required',
+  });
 
 // ─── Tickets ─────────────────────────────────────────────────
 const ticketCreateSchema = z.object({

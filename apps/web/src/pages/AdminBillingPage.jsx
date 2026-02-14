@@ -140,12 +140,16 @@ export default function AdminBillingPage() {
         </button>
       }
     >
-      {error ? (
-        <div className="card border border-red-200/60 text-red-600 text-sm">{error}</div>
-      ) : null}
+      {error ? <div className="card border border-red-200/60 text-red-600 text-sm">{error}</div> : null}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <motion.div className="card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} whileHover={{ y: -2 }}>
+        <motion.div
+          className="card"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          whileHover={{ y: -2 }}
+        >
           <div className="flex items-center gap-2 text-slate-700 font-semibold mb-4">
             <FilePlus2 className="h-4 w-4" />
             Create invoice
@@ -250,7 +254,13 @@ export default function AdminBillingPage() {
           </form>
         </motion.div>
 
-        <motion.div className="card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.1 }} whileHover={{ y: -2 }}>
+        <motion.div
+          className="card"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          whileHover={{ y: -2 }}
+        >
           <div className="flex items-center gap-2 text-slate-700 font-semibold mb-4">
             <CreditCard className="h-4 w-4" />
             Record payment
@@ -358,11 +368,15 @@ export default function AdminBillingPage() {
           <div className="text-slate-700 font-semibold mb-3">Recent invoices</div>
           <div className="space-y-2 text-sm">
             {invoices.slice(0, 8).map((inv, i) => (
-              <motion.div key={inv._id} className="flex items-center justify-between border-b border-slate-200/60 pb-2" initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}>
+              <motion.div
+                key={inv._id}
+                className="flex items-center justify-between border-b border-slate-200/60 pb-2"
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.05 }}
+              >
                 <div>
-                  <div className="text-slate-800 font-medium">
-                    {inv.invoiceNumber || inv._id}
-                  </div>
+                  <div className="text-slate-800 font-medium">{inv.invoiceNumber || inv._id}</div>
                   <div className="text-slate-500">Status: {inv.status}</div>
                 </div>
                 <div className="text-slate-700 font-semibold">{currency(inv.totalAmount)}</div>
@@ -375,10 +389,18 @@ export default function AdminBillingPage() {
           <div className="text-slate-700 font-semibold mb-3">Recent payments</div>
           <div className="space-y-2 text-sm">
             {payments.slice(0, 8).map((pay, i) => (
-              <motion.div key={pay._id} className="flex items-center justify-between border-b border-slate-200/60 pb-2" initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}>
+              <motion.div
+                key={pay._id}
+                className="flex items-center justify-between border-b border-slate-200/60 pb-2"
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.05 }}
+              >
                 <div>
                   <div className="text-slate-800 font-medium">{pay.transactionId || pay._id}</div>
-                  <div className="text-slate-500">{pay.paymentMethod} · {pay.status}</div>
+                  <div className="text-slate-500">
+                    {pay.paymentMethod} · {pay.status}
+                  </div>
                 </div>
                 <div className="text-slate-700 font-semibold">{currency(pay.amount)}</div>
               </motion.div>

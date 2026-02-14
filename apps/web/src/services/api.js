@@ -5,11 +5,11 @@ const getBaseURL = () => {
   // In development, Vite proxy handles /api to backend
   // In production, use full backend URL if provided
   const backendUrl = import.meta.env.VITE_API_BASE || import.meta.env.BACKEND_URL;
-  
+
   if (backendUrl) {
     return backendUrl;
   }
-  
+
   // Default: root so /api paths keep working with Vite proxy
   return '';
 };
@@ -52,7 +52,7 @@ api.interceptors.response.use(
       _onUnauthorized();
     }
     return Promise.reject(err);
-  }
+  },
 );
 
 export default api;

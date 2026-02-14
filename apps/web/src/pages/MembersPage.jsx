@@ -42,7 +42,6 @@ export default function MembersPage({ role }) {
         .then((res) => setPlans(res.data || []))
         .catch(() => null);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin]);
 
   const filtered = useMemo(() => {
@@ -228,11 +227,15 @@ export default function MembersPage({ role }) {
                 <span className="text-xs px-2 py-1 rounded-full bg-white text-slate-600 border border-slate-200">
                   @{user.username}
                 </span>
-                <span className={`text-xs px-2 py-1 rounded-full border ${
-                  user.role === 'admin' ? 'bg-violet-50 text-violet-700 border-violet-200'
-                  : user.role === 'trainer' ? 'bg-amber-50 text-amber-700 border-amber-200'
-                  : 'bg-sky-50 text-sky-700 border-sky-200'
-                }`}>
+                <span
+                  className={`text-xs px-2 py-1 rounded-full border ${
+                    user.role === 'admin'
+                      ? 'bg-violet-50 text-violet-700 border-violet-200'
+                      : user.role === 'trainer'
+                        ? 'bg-amber-50 text-amber-700 border-amber-200'
+                        : 'bg-sky-50 text-sky-700 border-sky-200'
+                  }`}
+                >
                   {user.role}
                 </span>
               </div>

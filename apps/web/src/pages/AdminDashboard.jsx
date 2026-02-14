@@ -7,8 +7,20 @@ import api from '../services/api';
 
 const quickActions = [
   { label: 'Members', desc: 'View & manage', icon: Users, gradient: 'from-blue-500 to-cyan-500', tab: 'members' },
-  { label: 'Billing', desc: 'Invoices & payments', icon: CreditCard, gradient: 'from-emerald-500 to-teal-500', tab: 'billing' },
-  { label: 'Support', desc: 'Tickets & issues', icon: LifeBuoy, gradient: 'from-violet-500 to-purple-500', tab: 'support' },
+  {
+    label: 'Billing',
+    desc: 'Invoices & payments',
+    icon: CreditCard,
+    gradient: 'from-emerald-500 to-teal-500',
+    tab: 'billing',
+  },
+  {
+    label: 'Support',
+    desc: 'Tickets & issues',
+    icon: LifeBuoy,
+    gradient: 'from-violet-500 to-purple-500',
+    tab: 'support',
+  },
   { label: 'Database', desc: 'Explore tables', icon: Database, gradient: 'from-amber-500 to-orange-500', tab: 'db' },
 ];
 
@@ -20,13 +32,19 @@ export default function AdminDashboard({ onTabChange }) {
     let mounted = true;
     api
       .get('/api/stats')
-      .then((res) => { if (mounted) setStats(res.data); })
+      .then((res) => {
+        if (mounted) setStats(res.data);
+      })
       .catch((e) => console.error(e));
     api
       .get('/api/admin/analytics/overview')
-      .then((res) => { if (mounted) setOverview(res.data || {}); })
+      .then((res) => {
+        if (mounted) setOverview(res.data || {});
+      })
       .catch(() => null);
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return (
@@ -56,7 +74,14 @@ export default function AdminDashboard({ onTabChange }) {
         style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)' }}
       >
         {/* Animated mesh gradient overlay */}
-        <div className="absolute inset-0 opacity-30 animate-gradient-x" style={{ background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent, rgba(14,165,233,0.3), transparent)', backgroundSize: '300% 100%' }} />
+        <div
+          className="absolute inset-0 opacity-30 animate-gradient-x"
+          style={{
+            background:
+              'linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent, rgba(14,165,233,0.3), transparent)',
+            backgroundSize: '300% 100%',
+          }}
+        />
         {/* Decorative circles */}
         <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-indigo-500/10 blur-2xl" />
         <div className="absolute -left-10 -bottom-10 h-48 w-48 rounded-full bg-cyan-500/10 blur-2xl" />
@@ -100,12 +125,27 @@ export default function AdminDashboard({ onTabChange }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard title="Total Members" value={stats.totalUsers || 0} Icon={Users} colorClass="text-slate-700" />
         <StatCard title="Active Members" value={stats.activeUsers || 0} Icon={Activity} colorClass="text-emerald-600" />
-        <StatCard title="Membership Plans" value={stats.totalPlans || 0} Icon={DollarSign} colorClass="text-indigo-600" />
-        <StatCard title="Total Visits" value={overview.totalVisits || 0} Icon={TrendingUp} colorClass="text-amber-600" />
+        <StatCard
+          title="Membership Plans"
+          value={stats.totalPlans || 0}
+          Icon={DollarSign}
+          colorClass="text-indigo-600"
+        />
+        <StatCard
+          title="Total Visits"
+          value={overview.totalVisits || 0}
+          Icon={TrendingUp}
+          colorClass="text-amber-600"
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <StatCard title="Total Revenue" value={`$${(overview.totalRevenue || 0).toFixed(2)}`} Icon={DollarSign} colorClass="text-emerald-600" />
+        <StatCard
+          title="Total Revenue"
+          value={`$${(overview.totalRevenue || 0).toFixed(2)}`}
+          Icon={DollarSign}
+          colorClass="text-emerald-600"
+        />
         <div className="card">
           <h2 className="text-slate-800 text-lg font-bold mb-4">Quick Actions</h2>
           <div className="grid grid-cols-2 gap-3">
@@ -120,7 +160,9 @@ export default function AdminDashboard({ onTabChange }) {
                 onClick={() => onTabChange?.(action.tab)}
                 className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 cursor-pointer hover:shadow-lg hover:border-slate-300 transition-all duration-300"
               >
-                <div className={`h-9 w-9 rounded-lg bg-gradient-to-br ${action.gradient} flex items-center justify-center mb-3 shadow-sm`}>
+                <div
+                  className={`h-9 w-9 rounded-lg bg-gradient-to-br ${action.gradient} flex items-center justify-center mb-3 shadow-sm`}
+                >
                   <action.icon className="h-4.5 w-4.5 text-white" />
                 </div>
                 <div className="text-slate-800 font-semibold text-sm">{action.label}</div>

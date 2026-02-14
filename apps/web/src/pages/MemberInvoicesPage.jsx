@@ -40,7 +40,7 @@ export default function MemberInvoicesPage() {
     return rows.filter((r) =>
       [r.invoiceNumber, r.status, r.issueDate, r.dueDate, r.totalAmount]
         .filter(Boolean)
-        .some((v) => String(v).toLowerCase().includes(s))
+        .some((v) => String(v).toLowerCase().includes(s)),
     );
   }, [rows, q]);
 
@@ -52,12 +52,7 @@ export default function MemberInvoicesPage() {
         <>
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search…"
-              className="input pl-9"
-            />
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search…" className="input pl-9" />
           </div>
           <button onClick={load} className="btn-ghost" title="Refresh">
             <RefreshCcw className={loading ? 'h-4 w-4 animate-spin' : 'h-4 w-4'} />
@@ -71,9 +66,7 @@ export default function MemberInvoicesPage() {
           <div className="text-slate-700 font-bold flex items-center gap-2">
             <CreditCard className="h-4 w-4 text-slate-600" /> Invoices
           </div>
-          <div className="text-slate-500 text-xs">
-            {loading ? 'Loading…' : `${filtered.length} shown`}
-          </div>
+          <div className="text-slate-500 text-xs">{loading ? 'Loading…' : `${filtered.length} shown`}</div>
         </div>
 
         {error ? <div className="p-4 text-red-600 text-sm">{error}</div> : null}
@@ -101,9 +94,7 @@ export default function MemberInvoicesPage() {
                     className="border-t border-slate-100 hover:bg-slate-50 transition-colors"
                   >
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">
-                      <div className="font-semibold text-slate-900">
-                        {r.invoiceNumber || `INV-${r._id || r.id}`}
-                      </div>
+                      <div className="font-semibold text-slate-900">{r.invoiceNumber || `INV-${r._id || r.id}`}</div>
                       <div className="text-slate-400 text-xs">ID: {r._id || r.id}</div>
                     </td>
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">
@@ -112,9 +103,7 @@ export default function MemberInvoicesPage() {
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">
                       {r.dueDate ? new Date(r.dueDate).toLocaleDateString() : '—'}
                     </td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">
-                      {currency(r.totalAmount)}
-                    </td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{currency(r.totalAmount)}</td>
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">
                       <span className="inline-flex px-2 py-1 rounded-lg bg-slate-50 border border-slate-200 text-xs">
                         {r.status || 'unpaid'}

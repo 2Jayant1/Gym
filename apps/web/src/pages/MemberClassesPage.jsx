@@ -51,8 +51,11 @@ export default function MemberClassesPage() {
   }, []);
 
   const regScheduleIds = useMemo(
-    () => new Set(registrations.filter((r) => r.status !== 'cancelled').map((r) => r.classSchedule?._id || r.classSchedule)),
-    [registrations]
+    () =>
+      new Set(
+        registrations.filter((r) => r.status !== 'cancelled').map((r) => r.classSchedule?._id || r.classSchedule),
+      ),
+    [registrations],
   );
 
   const handleRegister = async (scheduleId) => {
@@ -87,7 +90,7 @@ export default function MemberClassesPage() {
     return classes.filter((c) =>
       [c.name, c.category, c.difficultyLevel, c.trainer_name]
         .filter(Boolean)
-        .some((v) => String(v).toLowerCase().includes(s))
+        .some((v) => String(v).toLowerCase().includes(s)),
     );
   }, [classes, q]);
 
@@ -99,7 +102,12 @@ export default function MemberClassesPage() {
         <>
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search classes…" className="input pl-9" />
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search classes…"
+              className="input pl-9"
+            />
           </div>
           <button onClick={load} className="btn-ghost" title="Refresh">
             <RefreshCcw className={loading ? 'h-4 w-4 animate-spin' : 'h-4 w-4'} />
@@ -119,7 +127,10 @@ export default function MemberClassesPage() {
                 const sched = r.classSchedule || {};
                 const cls = sched.fitnessClass || {};
                 return (
-                  <div key={r._id} className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4">
+                  <div
+                    key={r._id}
+                    className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4"
+                  >
                     <div>
                       <div className="text-slate-900 font-semibold">{cls.name || 'Class'}</div>
                       <div className="text-slate-500 text-sm">
@@ -161,7 +172,14 @@ export default function MemberClassesPage() {
           </div>
           <div className="grid gap-3 p-4">
             {filtered.map((c, i) => (
-              <motion.div key={c._id || c.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }} whileHover={{ y: -2 }} className="rounded-2xl border border-slate-200 bg-white p-4 hover:bg-slate-50 transition-colors">
+              <motion.div
+                key={c._id || c.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.03 }}
+                whileHover={{ y: -2 }}
+                className="rounded-2xl border border-slate-200 bg-white p-4 hover:bg-slate-50 transition-colors"
+              >
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <div className="text-slate-900 font-bold text-lg">{c.name}</div>
@@ -170,9 +188,7 @@ export default function MemberClassesPage() {
                       {c.trainer_name ? ` • ${c.trainer_name}` : ''}
                     </div>
                     {c.description && <div className="text-slate-500 text-sm mt-1">{c.description}</div>}
-                    <div className="text-slate-400 text-xs mt-2">
-                      Max participants: {c.maxParticipants || '—'}
-                    </div>
+                    <div className="text-slate-400 text-xs mt-2">Max participants: {c.maxParticipants || '—'}</div>
                   </div>
                 </div>
 
@@ -182,10 +198,13 @@ export default function MemberClassesPage() {
                     {c.schedules.slice(0, 5).map((s) => {
                       const isRegistered = regScheduleIds.has(s._id);
                       return (
-                        <div key={s._id} className="flex items-center justify-between bg-slate-50 rounded-lg px-3 py-2 text-sm">
+                        <div
+                          key={s._id}
+                          className="flex items-center justify-between bg-slate-50 rounded-lg px-3 py-2 text-sm"
+                        >
                           <div className="text-slate-600">
-                            {s.classDate ? new Date(s.classDate).toLocaleDateString() : '—'} •{' '}
-                            {s.startTime || '—'} – {s.endTime || '—'} • {s.room || ''}
+                            {s.classDate ? new Date(s.classDate).toLocaleDateString() : '—'} • {s.startTime || '—'} –{' '}
+                            {s.endTime || '—'} • {s.room || ''}
                           </div>
                           {isRegistered ? (
                             <span className="text-xs px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">

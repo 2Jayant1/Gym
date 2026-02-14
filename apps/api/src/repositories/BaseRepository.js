@@ -32,11 +32,11 @@ class BaseRepository {
 
   find(filter = {}, options = {}) {
     let q = this.model.find(filter);
-    if (options.select)  q = q.select(options.select);
+    if (options.select) q = q.select(options.select);
     if (options.populate) q = q.populate(options.populate);
-    if (options.sort)    q = q.sort(options.sort);
-    if (options.skip)    q = q.skip(options.skip);
-    if (options.limit)   q = q.limit(options.limit);
+    if (options.sort) q = q.sort(options.sort);
+    if (options.skip) q = q.skip(options.skip);
+    if (options.limit) q = q.limit(options.limit);
     return options.lean !== false ? q.lean() : q;
   }
 

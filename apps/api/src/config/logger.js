@@ -21,10 +21,13 @@ const logger = createLogger({
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     format.errors({ stack: true }),
     isDev
-      ? format.combine(format.colorize(), format.printf(({ timestamp, level, message, ...meta }) => {
-          const extra = Object.keys(meta).length > 1 ? ` ${JSON.stringify(meta)}` : '';
-          return `${timestamp} ${level}: ${message}${extra}`;
-        }))
+      ? format.combine(
+          format.colorize(),
+          format.printf(({ timestamp, level, message, ...meta }) => {
+            const extra = Object.keys(meta).length > 1 ? ` ${JSON.stringify(meta)}` : '';
+            return `${timestamp} ${level}: ${message}${extra}`;
+          }),
+        )
       : format.json(),
   ),
   transports: [new transports.Console()],

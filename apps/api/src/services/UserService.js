@@ -11,24 +11,34 @@ class UserService {
 
   async getProfile(userId) {
     const u = await this.repos.user.findById(userId, {
-      select: 'username email role name phone joinDate membershipPlan status heightCm weightKg fitnessGoals medicalConditions',
+      select:
+        'username email role name phone joinDate membershipPlan status heightCm weightKg fitnessGoals medicalConditions',
       populate: { path: 'membershipPlan', select: 'name' },
     });
     if (!u) throw AppError.notFound('User');
 
     return {
-      id: u._id, username: u.username, email: u.email, role: u.role,
-      name: u.name, phone: u.phone, join_date: u.joinDate,
+      id: u._id,
+      username: u.username,
+      email: u.email,
+      role: u.role,
+      name: u.name,
+      phone: u.phone,
+      join_date: u.joinDate,
       membership_plan_id: u.membershipPlan?._id,
       plan_name: u.membershipPlan?.name,
-      status: u.status, height_cm: u.heightCm, weight_kg: u.weightKg,
-      fitness_goals: u.fitnessGoals, medical_conditions: u.medicalConditions,
+      status: u.status,
+      height_cm: u.heightCm,
+      weight_kg: u.weightKg,
+      fitness_goals: u.fitnessGoals,
+      medical_conditions: u.medicalConditions,
     };
   }
 
   async updateProfile(userId, data) {
     const u = await this.repos.user.update(userId, data, {
-      select: 'username email role name phone address fitnessGoals medicalConditions timezone emergencyContact emergencyPhone heightCm weightKg dateOfBirth gender avatarUrl',
+      select:
+        'username email role name phone address fitnessGoals medicalConditions timezone emergencyContact emergencyPhone heightCm weightKg dateOfBirth gender avatarUrl',
     });
     if (!u) throw AppError.notFound('User');
     return u;
@@ -51,20 +61,30 @@ class UserService {
     const [rows, total] = await Promise.all([
       this.repos.user.find(filter, {
         populate: { path: 'membershipPlan', select: 'name' },
-        select: 'username email role name phone joinDate membershipPlan status heightCm weightKg fitnessGoals medicalConditions',
+        select:
+          'username email role name phone joinDate membershipPlan status heightCm weightKg fitnessGoals medicalConditions',
         sort: { joinDate: -1 },
-        skip, limit,
+        skip,
+        limit,
       }),
       this.repos.user.count(filter),
     ]);
 
     const mapped = rows.map((u) => ({
-      id: u._id, username: u.username, email: u.email, role: u.role,
-      name: u.name, phone: u.phone, join_date: u.joinDate,
+      id: u._id,
+      username: u.username,
+      email: u.email,
+      role: u.role,
+      name: u.name,
+      phone: u.phone,
+      join_date: u.joinDate,
       membership_plan_id: u.membershipPlan?._id,
       plan_name: u.membershipPlan?.name,
-      status: u.status, height_cm: u.heightCm, weight_kg: u.weightKg,
-      fitness_goals: u.fitnessGoals, medical_conditions: u.medicalConditions,
+      status: u.status,
+      height_cm: u.heightCm,
+      weight_kg: u.weightKg,
+      fitness_goals: u.fitnessGoals,
+      medical_conditions: u.medicalConditions,
     }));
 
     return { mapped, total };

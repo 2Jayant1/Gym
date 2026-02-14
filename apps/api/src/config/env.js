@@ -9,20 +9,20 @@ const { z } = require('zod');
 require('dotenv').config();
 
 const envSchema = z.object({
-  PORT:          z.coerce.number().default(5001),
-  NODE_ENV:      z.enum(['development', 'production', 'test']).default('development'),
-  MONGODB_URI:   z.string().min(1, 'MONGODB_URI is required'),
-  AUTH_SECRET:   z.string().min(8, 'AUTH_SECRET must be ≥ 8 characters'),
-  CORS_ORIGIN:   z.string().default('http://localhost:3000'),
+  PORT: z.coerce.number().default(5001),
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  MONGODB_URI: z.string().min(1, 'MONGODB_URI is required'),
+  AUTH_SECRET: z.string().min(8, 'AUTH_SECRET must be ≥ 8 characters'),
+  CORS_ORIGIN: z.string().default('http://localhost:3000'),
 
   // JWT
-  JWT_EXPIRES_IN:         z.string().default('10m'),
+  JWT_EXPIRES_IN: z.string().default('10m'),
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
   REFRESH_TOKEN_TTL_DAYS: z.coerce.number().default(7),
 
   // Rate-limiting
-  RATE_LIMIT_WINDOW_MS:  z.coerce.number().default(15 * 60 * 1000),
-  RATE_LIMIT_MAX:        z.coerce.number().default(300),
+  RATE_LIMIT_WINDOW_MS: z.coerce.number().default(15 * 60 * 1000),
+  RATE_LIMIT_MAX: z.coerce.number().default(300),
 
   // Request timeout
   REQUEST_TIMEOUT_MS: z.coerce.number().default(30_000),

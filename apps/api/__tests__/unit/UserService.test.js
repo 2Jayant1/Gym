@@ -84,9 +84,9 @@ describe('UserService', () => {
 
     it('should throw if user not found', async () => {
       repos.user.findById.mockResolvedValue(null);
-      await expect(
-        userService.changePassword('nope', { currentPassword: 'a', newPassword: 'b' }),
-      ).rejects.toThrow('User not found');
+      await expect(userService.changePassword('nope', { currentPassword: 'a', newPassword: 'b' })).rejects.toThrow(
+        'User not found',
+      );
     });
   });
 

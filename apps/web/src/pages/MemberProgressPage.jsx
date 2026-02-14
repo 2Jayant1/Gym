@@ -5,7 +5,15 @@ import { useToast } from '../components/ToastContext';
 import api from '../services/api';
 import { motion } from 'framer-motion';
 
-const emptyEntry = { weightKg: '', bodyFatPercentage: '', muscleMassKg: '', chestCm: '', waistCm: '', hipsCm: '', notes: '' };
+const emptyEntry = {
+  weightKg: '',
+  bodyFatPercentage: '',
+  muscleMassKg: '',
+  chestCm: '',
+  waistCm: '',
+  hipsCm: '',
+  notes: '',
+};
 
 export default function MemberProgressPage() {
   const [rows, setRows] = useState([]);
@@ -41,7 +49,7 @@ export default function MemberProgressPage() {
     return rows.filter((r) =>
       [r.recordDate, r.weightKg, r.bodyFatPercentage, r.muscleMassKg, r.notes]
         .filter(Boolean)
-        .some((v) => String(v).toLowerCase().includes(s))
+        .some((v) => String(v).toLowerCase().includes(s)),
     );
   }, [rows, q]);
 
@@ -57,12 +65,7 @@ export default function MemberProgressPage() {
           </button>
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search…"
-              className="input pl-9"
-            />
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search…" className="input pl-9" />
           </div>
           <button onClick={load} className="btn-ghost" title="Refresh">
             <RefreshCcw className={loading ? 'h-4 w-4 animate-spin' : 'h-4 w-4'} />
@@ -97,16 +100,81 @@ export default function MemberProgressPage() {
               }
             }}
           >
-            <div><label className="label">Weight (kg)</label><input type="number" step="0.1" className="input" value={entry.weightKg} onChange={(e) => setEntry((s) => ({ ...s, weightKg: e.target.value }))} /></div>
-            <div><label className="label">Body Fat %</label><input type="number" step="0.1" className="input" value={entry.bodyFatPercentage} onChange={(e) => setEntry((s) => ({ ...s, bodyFatPercentage: e.target.value }))} /></div>
-            <div><label className="label">Muscle (kg)</label><input type="number" step="0.1" className="input" value={entry.muscleMassKg} onChange={(e) => setEntry((s) => ({ ...s, muscleMassKg: e.target.value }))} /></div>
-            <div><label className="label">Chest (cm)</label><input type="number" step="0.1" className="input" value={entry.chestCm} onChange={(e) => setEntry((s) => ({ ...s, chestCm: e.target.value }))} /></div>
-            <div><label className="label">Waist (cm)</label><input type="number" step="0.1" className="input" value={entry.waistCm} onChange={(e) => setEntry((s) => ({ ...s, waistCm: e.target.value }))} /></div>
-            <div><label className="label">Hips (cm)</label><input type="number" step="0.1" className="input" value={entry.hipsCm} onChange={(e) => setEntry((s) => ({ ...s, hipsCm: e.target.value }))} /></div>
-            <div className="col-span-2"><label className="label">Notes</label><input className="input" value={entry.notes} onChange={(e) => setEntry((s) => ({ ...s, notes: e.target.value }))} /></div>
+            <div>
+              <label className="label">Weight (kg)</label>
+              <input
+                type="number"
+                step="0.1"
+                className="input"
+                value={entry.weightKg}
+                onChange={(e) => setEntry((s) => ({ ...s, weightKg: e.target.value }))}
+              />
+            </div>
+            <div>
+              <label className="label">Body Fat %</label>
+              <input
+                type="number"
+                step="0.1"
+                className="input"
+                value={entry.bodyFatPercentage}
+                onChange={(e) => setEntry((s) => ({ ...s, bodyFatPercentage: e.target.value }))}
+              />
+            </div>
+            <div>
+              <label className="label">Muscle (kg)</label>
+              <input
+                type="number"
+                step="0.1"
+                className="input"
+                value={entry.muscleMassKg}
+                onChange={(e) => setEntry((s) => ({ ...s, muscleMassKg: e.target.value }))}
+              />
+            </div>
+            <div>
+              <label className="label">Chest (cm)</label>
+              <input
+                type="number"
+                step="0.1"
+                className="input"
+                value={entry.chestCm}
+                onChange={(e) => setEntry((s) => ({ ...s, chestCm: e.target.value }))}
+              />
+            </div>
+            <div>
+              <label className="label">Waist (cm)</label>
+              <input
+                type="number"
+                step="0.1"
+                className="input"
+                value={entry.waistCm}
+                onChange={(e) => setEntry((s) => ({ ...s, waistCm: e.target.value }))}
+              />
+            </div>
+            <div>
+              <label className="label">Hips (cm)</label>
+              <input
+                type="number"
+                step="0.1"
+                className="input"
+                value={entry.hipsCm}
+                onChange={(e) => setEntry((s) => ({ ...s, hipsCm: e.target.value }))}
+              />
+            </div>
+            <div className="col-span-2">
+              <label className="label">Notes</label>
+              <input
+                className="input"
+                value={entry.notes}
+                onChange={(e) => setEntry((s) => ({ ...s, notes: e.target.value }))}
+              />
+            </div>
             <div className="col-span-2 md:col-span-3 lg:col-span-4 flex justify-end gap-2">
-              <button type="button" onClick={() => setShowForm(false)} className="btn-ghost">Cancel</button>
-              <button type="submit" disabled={busy} className="btn-primary">{busy ? 'Saving…' : 'Save Entry'}</button>
+              <button type="button" onClick={() => setShowForm(false)} className="btn-ghost">
+                Cancel
+              </button>
+              <button type="submit" disabled={busy} className="btn-primary">
+                {busy ? 'Saving…' : 'Save Entry'}
+              </button>
             </div>
           </form>
         </div>
@@ -116,9 +184,7 @@ export default function MemberProgressPage() {
           <div className="text-slate-700 font-bold flex items-center gap-2">
             <LineChart className="h-4 w-4 text-slate-600" /> Progress
           </div>
-          <div className="text-slate-500 text-xs">
-            {loading ? 'Loading…' : `${filtered.length} shown`}
-          </div>
+          <div className="text-slate-500 text-xs">{loading ? 'Loading…' : `${filtered.length} shown`}</div>
         </div>
 
         {error ? <div className="p-4 text-red-600 text-sm">{error}</div> : null}
@@ -148,15 +214,9 @@ export default function MemberProgressPage() {
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">
                       {r.recordDate ? new Date(r.recordDate).toLocaleDateString() : '—'}
                     </td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">
-                      {r.weightKg ?? '—'}
-                    </td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">
-                      {r.bodyFatPercentage ?? '—'}
-                    </td>
-                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">
-                      {r.muscleMassKg ?? '—'}
-                    </td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{r.weightKg ?? '—'}</td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{r.bodyFatPercentage ?? '—'}</td>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{r.muscleMassKg ?? '—'}</td>
                     <td className="px-4 py-3 text-slate-600">{r.notes || '—'}</td>
                   </motion.tr>
                 ))}

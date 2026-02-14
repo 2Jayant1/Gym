@@ -73,9 +73,24 @@ class AuthService {
     });
   }
 
+  // Backward-compatible aliases (used in existing unit tests)
+  signAccessToken(payload) {
+    return this.issueAccessToken(payload);
+  }
+
+  signRefreshToken(payload) {
+    // payload may omit jti/tokenFamily; generate defaults for compatibility
+    const tokenFamily = payload.tokenFamily || crypto.randomUUID();
+    const jti = payload.jti || crypto.randomUUID();
+    return this.issueRefreshToken({ userId: payload.id, tokenFamily, jti });
+  }
+
   verifyToken(token) {
-    try { return jwt.verify(token, this.config.AUTH_SECRET); }
-    catch { return null; }
+    try {
+      return jwt.verify(token, this.config.AUTH_SECRET);
+    } catch {
+      return null;
+    }
   }
 
   /* ─── Login ───────────────────────────────────────────── */
@@ -120,13 +135,11 @@ class AuthService {
       throw AppError.conflict(`A user with that ${field} already exists`);
     }
 
-    const defaultPlan = await this.repos.membershipPlan.findOne(
-      { status: 'active' },
-      { sort: { monthlyFee: 1 } },
-    );
+    const defaultPlan = await this.repos.membershipPlan.findOne({ status: 'active' }, { sort: { monthlyFee: 1 } });
 
     const user = await this.repos.user.create({
-      name, username,
+      name,
+      username,
       email: email.toLowerCase(),
       password,
       role: 'member',
@@ -138,12 +151,14 @@ class AuthService {
     });
 
     // Welcome notification (fire-and-forget)
-    this.repos.notification.create({
-      user: user._id,
-      title: 'Welcome to FitFlex!',
-      message: 'Your account has been created. Explore your dashboard to get started.',
-      type: 'success',
-    }).catch(() => {});
+    this.repos.notification
+      .create({
+        user: user._id,
+        title: 'Welcome to FitFlex!',
+        message: 'Your account has been created. Explore your dashboard to get started.',
+        type: 'success',
+      })
+      .catch(() => {});
 
     const tokenPayload = this.buildUserPayload(user);
     const tokenFamily = crypto.randomUUID();
@@ -176,7 +191,11 @@ class AuthService {
     // Expired or already revoked -> revoke family and reject
     const now = new Date();
     if (stored.revokedAt || stored.expiresAt < now) {
-      await this.revokeFamily({ userId: stored.user, tokenFamily: stored.tokenFamily, reason: stored.revokedAt ? stored.revokedReason || 'revoked' : 'expired' });
+      await this.revokeFamily({
+        userId: stored.user,
+        tokenFamily: stored.tokenFamily,
+        reason: stored.revokedAt ? stored.revokedReason || 'revoked' : 'expired',
+      });
       throw AppError.unauthorized('Refresh token expired');
     }
 
@@ -199,7 +218,13 @@ class AuthService {
     const tokenPayload = this.buildUserPayload(user);
     const newAccessToken = this.issueAccessToken(tokenPayload);
     const newRefreshToken = this.issueRefreshToken({ userId: user._id, tokenFamily: stored.tokenFamily, jti: newJti });
-    await this.persistRefreshToken({ userId: user._id, tokenFamily: stored.tokenFamily, jti: newJti, token: newRefreshToken, context });
+    await this.persistRefreshToken({
+      userId: user._id,
+      tokenFamily: stored.tokenFamily,
+      jti: newJti,
+      token: newRefreshToken,
+      context,
+    });
 
     return { token: newAccessToken, refreshToken: newRefreshToken, user: tokenPayload };
   }

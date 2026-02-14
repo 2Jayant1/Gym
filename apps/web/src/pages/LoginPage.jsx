@@ -99,11 +99,7 @@ function ParticleField() {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ opacity: 0.7 }}
-    />
+    <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" style={{ opacity: 0.7 }} />
   );
 }
 
@@ -164,14 +160,9 @@ function PasswordStrength({ password }) {
     return s;
   })();
   const label = ['', 'Weak', 'Fair', 'Good', 'Strong', 'Excellent'][score] || '';
-  const color = [
-    'bg-slate-200',
-    'bg-red-400',
-    'bg-orange-400',
-    'bg-yellow-400',
-    'bg-emerald-400',
-    'bg-emerald-500',
-  ][score];
+  const color = ['bg-slate-200', 'bg-red-400', 'bg-orange-400', 'bg-yellow-400', 'bg-emerald-400', 'bg-emerald-500'][
+    score
+  ];
 
   if (!password) return null;
   return (
@@ -180,9 +171,7 @@ function PasswordStrength({ password }) {
         {[1, 2, 3, 4, 5].map((i) => (
           <div
             key={i}
-            className={`h-1 flex-1 rounded-full transition-all duration-300 ${
-              i <= score ? color : 'bg-white/10'
-            }`}
+            className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= score ? color : 'bg-white/10'}`}
           />
         ))}
       </div>
@@ -193,10 +182,25 @@ function PasswordStrength({ password }) {
 
 /* ─── Animated feature cards data ────────────────────────── */
 const features = [
-  { icon: Zap, title: 'Smart Billing', desc: 'Auto invoices & payments tracking', color: 'from-amber-500 to-orange-600' },
-  { icon: BarChart3, title: 'Live Analytics', desc: 'Real-time performance insights', color: 'from-indigo-500 to-purple-600' },
+  {
+    icon: Zap,
+    title: 'Smart Billing',
+    desc: 'Auto invoices & payments tracking',
+    color: 'from-amber-500 to-orange-600',
+  },
+  {
+    icon: BarChart3,
+    title: 'Live Analytics',
+    desc: 'Real-time performance insights',
+    color: 'from-indigo-500 to-purple-600',
+  },
   { icon: Users, title: 'Member Hub', desc: 'Complete member management', color: 'from-sky-500 to-cyan-600' },
-  { icon: Shield, title: 'Role-Based Access', desc: 'Admin, trainer & member portals', color: 'from-emerald-500 to-teal-600' },
+  {
+    icon: Shield,
+    title: 'Role-Based Access',
+    desc: 'Admin, trainer & member portals',
+    color: 'from-emerald-500 to-teal-600',
+  },
 ];
 
 const floatingIcons = [Activity, Heart, Timer, Trophy, Flame, Dumbbell, Zap, Sparkles];
@@ -275,9 +279,7 @@ export default function LoginPage({ onLogin }) {
       setSuccess('Account created! Logging you in…');
       setTimeout(() => onLogin(res.data), 600);
     } catch (err) {
-      setError(
-        err?.response?.data?.error || err?.response?.data?.errors?.[0]?.message || 'Registration failed'
-      );
+      setError(err?.response?.data?.error || err?.response?.data?.errors?.[0]?.message || 'Registration failed');
     } finally {
       setBusy(false);
     }
@@ -332,7 +334,7 @@ export default function LoginPage({ onLogin }) {
               delay: i * 0.5,
             }}
             style={{
-              left: `${10 + (i * 12) % 80}%`,
+              left: `${10 + ((i * 12) % 80)}%`,
               top: `${15 + ((i * 17) % 60)}%`,
             }}
           >
@@ -416,7 +418,9 @@ export default function LoginPage({ onLogin }) {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="text-white font-semibold text-sm">{f.title}</div>
-                      <div className={`text-sm transition-colors duration-300 ${isActive ? 'text-white/60' : 'text-white/30'}`}>
+                      <div
+                        className={`text-sm transition-colors duration-300 ${isActive ? 'text-white/60' : 'text-white/30'}`}
+                      >
                         {f.desc}
                       </div>
                     </div>
@@ -438,9 +442,15 @@ export default function LoginPage({ onLogin }) {
               animate={{ opacity: 1 }}
               transition={{ delay: 1, duration: 0.6 }}
             >
-              <span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5" /> Secure</span>
-              <span className="flex items-center gap-1.5"><Zap className="h-3.5 w-3.5" /> Fast</span>
-              <span className="flex items-center gap-1.5"><Activity className="h-3.5 w-3.5" /> Real-time</span>
+              <span className="flex items-center gap-1.5">
+                <Shield className="h-3.5 w-3.5" /> Secure
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Zap className="h-3.5 w-3.5" /> Fast
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Activity className="h-3.5 w-3.5" /> Real-time
+              </span>
             </motion.div>
           </motion.div>
 
@@ -554,7 +564,9 @@ export default function LoginPage({ onLogin }) {
                                 className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full"
                               />
                             ) : (
-                              <>Sign in <ArrowRight className="h-4 w-4" /></>
+                              <>
+                                Sign in <ArrowRight className="h-4 w-4" />
+                              </>
                             )}
                           </motion.button>
                         </form>
@@ -564,7 +576,7 @@ export default function LoginPage({ onLogin }) {
                             onClick={() => switchMode('register')}
                             className="text-white/40 hover:text-white/70 text-sm transition-colors"
                           >
-                            Don't have an account?{' '}
+                            Don&apos;t have an account?{' '}
                             <span className="text-indigo-400 font-medium hover:text-indigo-300">Create one</span>
                           </button>
                         </div>
@@ -574,9 +586,24 @@ export default function LoginPage({ onLogin }) {
                           <p className="text-white/30 text-xs text-center mb-3">Quick demo access</p>
                           <div className="grid grid-cols-3 gap-2">
                             {[
-                              { label: 'Admin', user: 'admin', color: 'from-violet-500/20 to-purple-500/20 border-violet-500/20 text-violet-300 hover:border-violet-400/40' },
-                              { label: 'Trainer', user: 'trainer', color: 'from-amber-500/20 to-orange-500/20 border-amber-500/20 text-amber-300 hover:border-amber-400/40' },
-                              { label: 'Member', user: 'member', color: 'from-sky-500/20 to-cyan-500/20 border-sky-500/20 text-sky-300 hover:border-sky-400/40' },
+                              {
+                                label: 'Admin',
+                                user: 'admin',
+                                color:
+                                  'from-violet-500/20 to-purple-500/20 border-violet-500/20 text-violet-300 hover:border-violet-400/40',
+                              },
+                              {
+                                label: 'Trainer',
+                                user: 'trainer',
+                                color:
+                                  'from-amber-500/20 to-orange-500/20 border-amber-500/20 text-amber-300 hover:border-amber-400/40',
+                              },
+                              {
+                                label: 'Member',
+                                user: 'member',
+                                color:
+                                  'from-sky-500/20 to-cyan-500/20 border-sky-500/20 text-sky-300 hover:border-sky-400/40',
+                              },
                             ].map((demo) => (
                               <motion.button
                                 key={demo.user}
@@ -716,7 +743,9 @@ export default function LoginPage({ onLogin }) {
                                 className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full"
                               />
                             ) : (
-                              <>Create account <Sparkles className="h-4 w-4" /></>
+                              <>
+                                Create account <Sparkles className="h-4 w-4" />
+                              </>
                             )}
                           </motion.button>
                         </form>

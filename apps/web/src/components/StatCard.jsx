@@ -47,12 +47,15 @@ export default function StatCard({ title, value, Icon, colorClass = 'text-slate-
   const glareX = useTransform(mouseX, [0, 1], [0, 100]);
   const glareY = useTransform(mouseY, [0, 1], [0, 100]);
 
-  const handleMouseMove = useCallback((e) => {
-    const rect = cardRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    mouseX.set((e.clientX - rect.left) / rect.width);
-    mouseY.set((e.clientY - rect.top) / rect.height);
-  }, [mouseX, mouseY]);
+  const handleMouseMove = useCallback(
+    (e) => {
+      const rect = cardRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      mouseX.set((e.clientX - rect.left) / rect.width);
+      mouseY.set((e.clientY - rect.top) / rect.height);
+    },
+    [mouseX, mouseY],
+  );
 
   const handleMouseLeave = useCallback(() => {
     mouseX.set(0.5);
@@ -76,12 +79,13 @@ export default function StatCard({ title, value, Icon, colorClass = 'text-slate-
         style={{
           background: useTransform(
             [glareX, glareY],
-            ([x, y]) => `radial-gradient(circle at ${x}% ${y}%, rgba(99,102,241,0.08) 0%, transparent 60%)`
+            ([x, y]) => `radial-gradient(circle at ${x}% ${y}%, rgba(99,102,241,0.08) 0%, transparent 60%)`,
           ),
         }}
       />
       {/* Shimmer sweep */}
-      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none"
+      <div
+        className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none"
         style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)', width: '60%' }}
       />
       {/* Decorative corner accent */}
@@ -101,9 +105,12 @@ export default function StatCard({ title, value, Icon, colorClass = 'text-slate-
             transition={{ type: 'spring', stiffness: 300 }}
             className="relative"
           >
-            <Icon className={`h-9 w-9 sm:h-12 sm:w-12 shrink-0 ml-3 ${colorClass} group-hover:scale-110 transition-transform duration-300`} />
+            <Icon
+              className={`h-9 w-9 sm:h-12 sm:w-12 shrink-0 ml-3 ${colorClass} group-hover:scale-110 transition-transform duration-300`}
+            />
             {/* Glow behind icon */}
-            <div className={`absolute inset-0 blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-500 ${colorClass}`}
+            <div
+              className={`absolute inset-0 blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-500 ${colorClass}`}
               style={{ background: 'currentColor', borderRadius: '50%' }}
             />
           </motion.div>

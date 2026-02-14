@@ -44,7 +44,7 @@ export default function MemberWorkoutPlansPage() {
         <div className="card text-center py-12 text-slate-500">
           <Dumbbell className="h-12 w-12 mx-auto mb-3 text-slate-300" />
           <div className="text-lg font-semibold text-slate-700">No workout plans yet</div>
-          <div className="text-sm">Your trainer will assign plans once you're set up.</div>
+          <div className="text-sm">Your trainer will assign plans once you&apos;re set up.</div>
         </div>
       )}
 
@@ -61,7 +61,14 @@ export default function MemberWorkoutPlansPage() {
           });
 
           return (
-            <motion.div key={plan._id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }} whileHover={{ y: -2 }} className="card p-0 overflow-hidden">
+            <motion.div
+              key={plan._id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.03 }}
+              whileHover={{ y: -2 }}
+              className="card p-0 overflow-hidden"
+            >
               <button
                 onClick={() => setExpanded(isExpanded ? null : plan._id)}
                 className="w-full p-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
@@ -78,7 +85,11 @@ export default function MemberWorkoutPlansPage() {
                     {plan.endDate ? new Date(plan.endDate).toLocaleDateString() : 'ongoing'}
                   </div>
                 </div>
-                {isExpanded ? <ChevronUp className="h-5 w-5 text-slate-400" /> : <ChevronDown className="h-5 w-5 text-slate-400" />}
+                {isExpanded ? (
+                  <ChevronUp className="h-5 w-5 text-slate-400" />
+                ) : (
+                  <ChevronDown className="h-5 w-5 text-slate-400" />
+                )}
               </button>
 
               {isExpanded && (
@@ -87,16 +98,17 @@ export default function MemberWorkoutPlansPage() {
                     .sort(([a], [b]) => Number(a) - Number(b))
                     .map(([day, exs]) => (
                       <div key={day}>
-                        <div className="text-slate-700 font-semibold mb-2">
-                          {dayNames[Number(day)] || `Day ${day}`}
-                        </div>
+                        <div className="text-slate-700 font-semibold mb-2">{dayNames[Number(day)] || `Day ${day}`}</div>
                         <div className="space-y-2">
                           {exs
                             .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
                             .map((we, i) => {
                               const ex = we.exercise || {};
                               return (
-                                <div key={we._id || i} className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
+                                <div
+                                  key={we._id || i}
+                                  className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2"
+                                >
                                   <div>
                                     <div className="text-slate-800 font-medium text-sm">{ex.name || 'Exercise'}</div>
                                     <div className="text-slate-500 text-xs">
@@ -104,10 +116,16 @@ export default function MemberWorkoutPlansPage() {
                                     </div>
                                   </div>
                                   <div className="text-right text-sm text-slate-600">
-                                    {we.sets && we.reps && <span>{we.sets}×{we.reps}</span>}
+                                    {we.sets && we.reps && (
+                                      <span>
+                                        {we.sets}×{we.reps}
+                                      </span>
+                                    )}
                                     {we.weightKg ? <span className="ml-2">{we.weightKg}kg</span> : null}
                                     {we.durationMinutes ? <span className="ml-2">{we.durationMinutes}min</span> : null}
-                                    {we.restSeconds ? <span className="ml-2 text-slate-400">rest {we.restSeconds}s</span> : null}
+                                    {we.restSeconds ? (
+                                      <span className="ml-2 text-slate-400">rest {we.restSeconds}s</span>
+                                    ) : null}
                                   </div>
                                 </div>
                               );

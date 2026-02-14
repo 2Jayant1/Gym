@@ -19,7 +19,9 @@ function PillIndicator({ tabs, activeTab, onTabChange }) {
     }
   }, [activeTab]);
 
-  useLayoutEffect(() => { updateIndicator(); }, [updateIndicator]);
+  useLayoutEffect(() => {
+    updateIndicator();
+  }, [updateIndicator]);
 
   useEffect(() => {
     window.addEventListener('resize', updateIndicator);
@@ -27,7 +29,10 @@ function PillIndicator({ tabs, activeTab, onTabChange }) {
   }, [updateIndicator]);
 
   return (
-    <div ref={containerRef} className="hidden md:flex items-center relative rounded-full bg-slate-100/80 backdrop-blur-sm border border-slate-200/60 px-1 py-1">
+    <div
+      ref={containerRef}
+      className="hidden md:flex items-center relative rounded-full bg-slate-100/80 backdrop-blur-sm border border-slate-200/60 px-1 py-1"
+    >
       <motion.div
         className="absolute top-1 bottom-1 rounded-full z-0"
         style={{ background: 'linear-gradient(135deg, #1e293b 0%, #475569 100%)' }}
@@ -38,7 +43,9 @@ function PillIndicator({ tabs, activeTab, onTabChange }) {
       {tabs.map((tab) => (
         <button
           key={tab.key}
-          ref={(el) => { tabRefs.current[tab.key] = el; }}
+          ref={(el) => {
+            tabRefs.current[tab.key] = el;
+          }}
           onClick={() => onTabChange(tab.key)}
           className={`relative z-10 px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-200 ${
             activeTab === tab.key ? 'text-white' : 'text-slate-500 hover:text-slate-800'
@@ -87,7 +94,12 @@ function AnimatedBell({ unread, onClick }) {
 
 /* ─── User avatar with status ─────────────────────────────── */
 function UserAvatar({ name, role }) {
-  const initials = (name || 'U').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  const initials = (name || 'U')
+    .split(' ')
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
   const gradients = {
     admin: 'from-violet-500 to-purple-600',
     trainer: 'from-amber-500 to-orange-600',
@@ -114,7 +126,9 @@ function RoleBadge({ role }) {
     member: 'from-sky-500/15 to-cyan-500/15 text-sky-700 border-sky-200/60',
   };
   return (
-    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gradient-to-r ${styles[role] || styles.member} border`}>
+    <span
+      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gradient-to-r ${styles[role] || styles.member} border`}
+    >
       <Sparkles className="h-2.5 w-2.5" />
       {role}
     </span>
@@ -130,7 +144,10 @@ export default function TopNav({ role, name, tabs, activeTab, onTabChange, onLog
   const profileRef = useRef(null);
 
   const fetchUnread = useCallback(() => {
-    api.get('/api/me/notifications/unread-count').then((r) => setUnread(r.data?.count || 0)).catch(() => null);
+    api
+      .get('/api/me/notifications/unread-count')
+      .then((r) => setUnread(r.data?.count || 0))
+      .catch(() => null);
   }, []);
 
   useEffect(() => {
@@ -150,14 +167,23 @@ export default function TopNav({ role, name, tabs, activeTab, onTabChange, onLog
 
   const toggleNotifs = () => {
     if (!showNotifs) {
-      api.get('/api/me/notifications').then((r) => setNotifs(r.data || [])).catch(() => null);
+      api
+        .get('/api/me/notifications')
+        .then((r) => setNotifs(r.data || []))
+        .catch(() => null);
     }
     setShowNotifs(!showNotifs);
     setShowProfile(false);
   };
 
   const markAllRead = () => {
-    api.patch('/api/me/notifications/read-all').then(() => { setUnread(0); fetchUnread(); }).catch(() => null);
+    api
+      .patch('/api/me/notifications/read-all')
+      .then(() => {
+        setUnread(0);
+        fetchUnread();
+      })
+      .catch(() => null);
   };
 
   return (
@@ -168,14 +194,24 @@ export default function TopNav({ role, name, tabs, activeTab, onTabChange, onLog
       className="sticky top-0 z-40 relative"
     >
       {/* Animated gradient top bar */}
-      <div className="absolute inset-x-0 top-0 h-[3px] animate-gradient-x" style={{ background: 'linear-gradient(90deg, #6366f1, #38bdf8, #10b981, #a855f7, #f43e5c, #6366f1)', backgroundSize: '300% 100%' }} />
+      <div
+        className="absolute inset-x-0 top-0 h-[3px] animate-gradient-x"
+        style={{
+          background: 'linear-gradient(90deg, #6366f1, #38bdf8, #10b981, #a855f7, #f43e5c, #6366f1)',
+          backgroundSize: '300% 100%',
+        }}
+      />
 
       {/* Glass background */}
       <div className="glass-effect border-b border-slate-200/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <motion.div className="flex items-center space-x-2.5" whileHover={{ scale: 1.02 }} transition={{ type: 'spring', stiffness: 300 }}>
+            <motion.div
+              className="flex items-center space-x-2.5"
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+            >
               <div className="relative">
                 <motion.div
                   className="h-10 w-10 rounded-xl bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 text-white flex items-center justify-center shadow-lg"
@@ -188,7 +224,9 @@ export default function TopNav({ role, name, tabs, activeTab, onTabChange, onLog
               </div>
               <div className="hidden xs:block">
                 <div className="text-slate-900 text-lg font-extrabold leading-tight tracking-tight">FitFlex</div>
-                <div className="text-slate-400 text-[10px] font-semibold uppercase tracking-widest leading-tight">Studio</div>
+                <div className="text-slate-400 text-[10px] font-semibold uppercase tracking-widest leading-tight">
+                  Studio
+                </div>
               </div>
             </motion.div>
 
@@ -212,7 +250,12 @@ export default function TopNav({ role, name, tabs, activeTab, onTabChange, onLog
                       <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-slate-50/50">
                         <span className="text-slate-800 font-bold text-sm">Notifications</span>
                         {unread > 0 && (
-                          <button onClick={markAllRead} className="text-indigo-600 hover:text-indigo-700 text-xs font-semibold hover:underline">Mark all read</button>
+                          <button
+                            onClick={markAllRead}
+                            className="text-indigo-600 hover:text-indigo-700 text-xs font-semibold hover:underline"
+                          >
+                            Mark all read
+                          </button>
                         )}
                       </div>
                       <div className="overflow-y-auto max-h-72">
@@ -231,11 +274,15 @@ export default function TopNav({ role, name, tabs, activeTab, onTabChange, onLog
                             className={`px-4 py-3 border-b border-slate-50 hover:bg-indigo-50/30 transition-colors cursor-default ${!n.read ? 'bg-indigo-50/40' : ''}`}
                           >
                             <div className="flex items-start gap-3">
-                              <div className={`h-2 w-2 rounded-full mt-1.5 shrink-0 ${!n.read ? 'bg-indigo-500' : 'bg-slate-200'}`} />
+                              <div
+                                className={`h-2 w-2 rounded-full mt-1.5 shrink-0 ${!n.read ? 'bg-indigo-500' : 'bg-slate-200'}`}
+                              />
                               <div>
                                 <div className="text-slate-800 text-sm font-medium">{n.title}</div>
                                 <div className="text-slate-500 text-xs mt-0.5">{n.message}</div>
-                                <div className="text-slate-300 text-[10px] mt-1">{n.createdAt ? new Date(n.createdAt).toLocaleString() : ''}</div>
+                                <div className="text-slate-300 text-[10px] mt-1">
+                                  {n.createdAt ? new Date(n.createdAt).toLocaleString() : ''}
+                                </div>
                               </div>
                             </div>
                           </motion.div>
@@ -249,7 +296,10 @@ export default function TopNav({ role, name, tabs, activeTab, onTabChange, onLog
               {/* Profile section */}
               <div className="relative" ref={profileRef}>
                 <motion.button
-                  onClick={() => { setShowProfile(!showProfile); setShowNotifs(false); }}
+                  onClick={() => {
+                    setShowProfile(!showProfile);
+                    setShowNotifs(false);
+                  }}
                   className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-xl hover:bg-slate-100/80 transition-colors"
                   whileTap={{ scale: 0.97 }}
                 >
@@ -258,7 +308,9 @@ export default function TopNav({ role, name, tabs, activeTab, onTabChange, onLog
                     <div className="text-slate-800 text-sm font-semibold leading-tight">{name}</div>
                     <RoleBadge role={role} />
                   </div>
-                  <ChevronDown className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-200 hidden sm:block ${showProfile ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-200 hidden sm:block ${showProfile ? 'rotate-180' : ''}`}
+                  />
                 </motion.button>
                 <AnimatePresence>
                   {showProfile && (
@@ -303,7 +355,9 @@ export default function TopNav({ role, name, tabs, activeTab, onTabChange, onLog
                 onClick={() => onTabChange(tab.key)}
                 whileTap={{ scale: 0.95 }}
                 className={`whitespace-nowrap text-xs sm:text-sm px-3.5 py-1.5 rounded-full font-medium transition-all duration-200 ${
-                  activeTab === tab.key ? 'text-white shadow-sm' : 'text-slate-500 hover:text-slate-800 hover:bg-white/80'
+                  activeTab === tab.key
+                    ? 'text-white shadow-sm'
+                    : 'text-slate-500 hover:text-slate-800 hover:bg-white/80'
                 }`}
                 style={activeTab === tab.key ? { background: 'linear-gradient(135deg, #1e293b, #334155)' } : {}}
               >
