@@ -1,0 +1,124 @@
+# ─── FitFlex Gym Management — Docker Compose ──────────────────
+# Start everything: docker compose up -d
+# Tear down:        docker compose down -v
+# Logs:             docker compose logs -f app
+
+services:
+  # ─── MongoDB ──────────────────────────────────────────────
+  mongo:
+    image: mongo:7
+    container_name: fitflex-mongo
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: gym_management
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Redis (caching layer) ────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: fitflex-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Node.js App (Backend) ────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fitflex-app
+    restart: unless-stopped
+    ports:
+      - '5001:5001'
+    environment:
+      NODE_ENV: production
+      PORT: 5001
+      MONGODB_URI: mongodb://mongo:27017/gym_management
+      AUTH_SECRET: ${AUTH_SECRET:-change-me-in-production-please}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost}
+      REDIS_URL: redis://redis:6379
+      LOG_LEVEL: info
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5001/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ─── ML API (FastAPI) ─────────────────────────────────────
+  ml:
+    build:
+      context: .
+      dockerfile: Dockerfile.ml
+    container_name: fitflex-ml
+    restart: unless-stopped
+    ports:
+      - '8001:8001'
+    environment:
+      AUTH_SECRET: ${AUTH_SECRET:-change-me-in-production-please}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost}
+      DISABLE_AUTH: 'false'
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://ollama:11434}
+    volumes:
+      - ./models:/app/models
+      - ./data:/app/data
+      - ./configs:/app/configs
+    depends_on:
+      app:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health', timeout=5).read(); print('ok')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ─── Ollama (local LLM runtime) ───────────────────────────
+  # Optional for production; if you use Groq/OpenAI set llm.provider accordingly.
+  ollama:
+    image: ollama/ollama:latest
+    container_name: fitflex-ollama
+    restart: unless-stopped
+    ports:
+      - '11434:11434'
+    volumes:
+      - ollama_data:/root/.ollama
+
+  # ─── Nginx (reverse proxy + static files) ─────────────────
+  nginx:
+    image: nginx:alpine
+    container_name: fitflex-nginx
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      app:
+        condition: service_healthy
+      ml:
+        condition: service_healthy
+
+volumes:
+  mongo_data:
+  redis_data:
+  ollama_data:

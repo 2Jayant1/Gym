@@ -1,0 +1,50 @@
+[
+  {
+    "cluster_id": 0,
+    "size": 5634,
+    "pct": 42.1,
+    "label": "Light-Activity Developing",
+    "centroid": {
+      "age": 40.5,
+      "gender": 2.0,
+      "height_cm": 161.51,
+      "weight_kg": 59.05,
+      "body_fat": 28.3,
+      "diastolic": 76.32,
+      "systolic": 125.14,
+      "gripforce": 26.9,
+      "sit_and_bend_forward_cm": 16.5,
+      "sit_ups_counts": 29.46,
+      "broad_jump_cm": 154.51,
+      "class": 1.61,
+      "relative_grip": 0.46,
+      "power_endurance_ratio": 6.94,
+      "pulse_pressure": 48.82,
+      "performance_score": -0.6
+    }
+  },
+  {
+    "cluster_id": 1,
+    "size": 7759,
+    "pct": 57.9,
+    "label": "Light-Activity",
+    "centroid": {
+      "age": 34.07,
+      "gender": 2.0,
+      "height_cm": 173.68,
+      "weight_kg": 73.54,
+      "body_fat": 19.57,
+      "diastolic": 80.59,
+      "systolic": 133.93,
+      "gripforce": 44.27,
+      "sit_and_bend_forward_cm": 14.28,
+      "sit_ups_counts": 47.26,
+      "broad_jump_cm": 215.99,
+      "class": 1.42,
+      "relative_grip": 0.61,
+      "power_endurance_ratio": 4.76,
+      "pulse_pressure": 53.34,
+      "performance_score": 0.44
+    }
+  }
+]

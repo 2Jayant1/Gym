@@ -1,0 +1,23 @@
+kaggle
+python-dotenv
+# Core
+pandas
+numpy
+scipy
+tqdm
+pydantic
+joblib
+pyarrow
+pyyaml
+# ML
+scikit-learn
+lightgbm
+xgboost
+# catboost  # incompatible with Python 3.14; skip
+# Serving
+fastapi
+uvicorn[standard]
+# Experiment tracking
+mlflow
+# Visualization
+matplotlib

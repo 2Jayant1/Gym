@@ -1,0 +1,102 @@
+# ─── FitFlex Gym Intelligence — Configuration ─────────────────
+project:
+  name: fitflex-gym-intelligence
+  version: "1.0.0"
+
+random_seed: 42
+test_size: 0.2
+
+# Data paths (relative to project root)
+data:
+  raw: data/raw
+  interim: data/interim
+  processed: data/processed
+  feature_store: data/feature_store
+  master_features: data/feature_store/master_features.parquet
+
+# Model artifacts
+models:
+  artifacts_dir: models/artifacts
+  registry_path: models/registry/model_registry.json
+
+# ─── Dataset file mapping ──────────────────────────────────────
+datasets:
+  gym_exercise: data/processed/gym-members-exercise-dataset/gym_members_exercise_tracking.csv
+  daily_gym: data/processed/daily-gym-attendance-and-workout-activity-data/daily_gym_attendance_workout_data.csv
+  body_perf: data/processed/body-performance-data/bodyPerformance.csv
+  calories: data/processed/calories-burning-dataset/calories.csv
+  exercise: data/processed/calories-burning-dataset/exercise.csv
+  fitbit_daily: "data/processed/fitbit/mturkfitbit_export_4.12.16-5.12.16/Fitabase Data 4.12.16-5.12.16/dailyActivity_merged.csv"
+
+# ─── Model definitions ────────────────────────────────────────
+model_configs:
+  workout_recommender:
+    type: classifier
+    algorithm: lightgbm
+    target: workout_type
+    metrics: [f1_weighted, roc_auc_ovr]
+    params:
+      n_estimators: 300
+      max_depth: 6
+      learning_rate: 0.05
+      num_leaves: 31
+      min_child_samples: 20
+      subsample: 0.8
+      colsample_bytree: 0.8
+
+  calorie_predictor:
+    type: regressor
+    algorithm: lightgbm
+    target: calories_burned
+    metrics: [mae, rmse]
+    params:
+      n_estimators: 400
+      max_depth: 8
+      learning_rate: 0.05
+      num_leaves: 63
+      min_child_samples: 15
+      subsample: 0.8
+      colsample_bytree: 0.8
+
+  adherence_predictor:
+    type: classifier
+    algorithm: xgboost
+    target: churn_risk
+    metrics: [f1, roc_auc]
+    params:
+      n_estimators: 300
+      max_depth: 5
+      learning_rate: 0.05
+      subsample: 0.8
+      colsample_bytree: 0.8
+      scale_pos_weight: 2
+
+  progress_forecaster:
+    type: regressor
+    algorithm: xgboost
+    target: performance_score
+    metrics: [mae, rmse]
+    params:
+      n_estimators: 300
+      max_depth: 6
+      learning_rate: 0.05
+      subsample: 0.8
+      colsample_bytree: 0.8
+
+# ─── Serving ──────────────────────────────────────────────────
+serving:
+  host: "0.0.0.0"
+  port: 8001
+
+# ─── LLM (AI Chatbot) ────────────────────────────────────────
+# Supports: ollama (local GPU), groq (free cloud), openai (paid)
+llm:
+  provider: ollama           # ollama | groq | openai
+  model: llama3.2:3b         # small model, fits RTX 2060 6GB
+  base_url: "http://localhost:11434"
+  # api_key: ""              # required for groq / openai
+
+# ─── Monitoring ───────────────────────────────────────────────
+monitoring:
+  log_dir: monitoring/logs
+  log_predictions: true

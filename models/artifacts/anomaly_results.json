@@ -1,0 +1,948 @@
+{
+  "total_anomalies": 1599,
+  "total_members": 31966,
+  "anomaly_rate": 5.0,
+  "datasets": {
+    "gym_exercise": {
+      "dataset": "Gym Exercise",
+      "total_rows": 973,
+      "anomalies_found": 49,
+      "anomaly_pct": 5.0,
+      "top_anomalies": [
+        {
+          "row_index": 261,
+          "anomaly_score": -0.0557,
+          "top_deviations": {
+            "bmi": {
+              "value": 47.72,
+              "mean": 24.91,
+              "z_score": 3.42
+            },
+            "weight_kg": {
+              "value": 126.8,
+              "mean": 73.85,
+              "z_score": 2.5
+            },
+            "cardio_efficiency": {
+              "value": 0.55,
+              "mean": 0.65,
+              "z_score": 2.31
+            },
+            "hydration_per_kg": {
+              "value": 0.02,
+              "mean": 0.04,
+              "z_score": 2.0
+            }
+          },
+          "description": "Bmi is 3.4\u03c3 higher than average (47.72 vs 24.91 avg). Weight Kg is 2.5\u03c3 higher than average (126.8 vs 73.85 avg). Cardio Efficiency is 2.3\u03c3 lower than average (0.55 vs 0.65 avg)."
+        },
+        {
+          "row_index": 779,
+          "anomaly_score": -0.0433,
+          "top_deviations": {
+            "intensity_index": {
+              "value": 3.34,
+              "mean": 2.34,
+              "z_score": 2.8
+            },
+            "fat_percentage": {
+              "value": 11.7,
+              "mean": 24.98,
+              "z_score": 2.12
+            },
+            "cardio_efficiency": {
+              "value": 0.75,
+              "mean": 0.65,
+              "z_score": 2.03
+            }
+          },
+          "description": "Intensity Index is 2.8\u03c3 higher than average (3.34 vs 2.34 avg). Fat Percentage is 2.1\u03c3 lower than average (11.7 vs 24.98 avg). Cardio Efficiency is 2.0\u03c3 higher than average (0.75 vs 0.65 avg)."
+        },
+        {
+          "row_index": 728,
+          "anomaly_score": -0.0405,
+          "top_deviations": {
+            "intensity_index": {
+              "value": 3.3,
+              "mean": 2.34,
+              "z_score": 2.69
+            },
+            "calories_burned": {
+              "value": 1634.0,
+              "mean": 905.42,
+              "z_score": 2.67
+            },
+            "session_duration_hours": {
+              "value": 2.0,
+              "mean": 1.26,
+              "z_score": 2.17
+            }
+          },
+          "description": "Intensity Index is 2.7\u03c3 higher than average (3.3 vs 2.34 avg). Calories Burned is 2.7\u03c3 higher than average (1634.0 vs 905.42 avg). Session Duration Hours is 2.2\u03c3 higher than average (2.0 vs 1.26 avg)."
+        },
+        {
+          "row_index": 118,
+          "anomaly_score": -0.0387,
+          "top_deviations": {
+            "intensity_index": {
+              "value": 3.36,
+              "mean": 2.34,
+              "z_score": 2.85
+            },
+            "calorie_rate": {
+              "value": 924.11,
+              "mean": 720.42,
+              "z_score": 2.34
+            }
+          },
+          "description": "Intensity Index is 2.9\u03c3 higher than average (3.36 vs 2.34 avg). Calorie Rate is 2.3\u03c3 higher than average (924.11 vs 720.42 avg)."
+        },
+        {
+          "row_index": 712,
+          "anomaly_score": -0.0353,
+          "top_deviations": {
+            "calories_burned": {
+              "value": 1766.0,
+              "mean": 905.42,
+              "z_score": 3.16
+            },
+            "calorie_rate": {
+              "value": 929.47,
+              "mean": 720.42,
+              "z_score": 2.4
+            },
+            "fat_percentage": {
+              "value": 10.1,
+              "mean": 24.98,
+              "z_score": 2.38
+            }
+          },
+          "description": "Calories Burned is 3.2\u03c3 higher than average (1766.0 vs 905.42 avg). Calorie Rate is 2.4\u03c3 higher than average (929.47 vs 720.42 avg). Fat Percentage is 2.4\u03c3 lower than average (10.1 vs 24.98 avg)."
+        },
+        {
+          "row_index": 644,
+          "anomaly_score": -0.0305,
+          "top_deviations": {
+            "intensity_index": {
+              "value": 3.15,
+              "mean": 2.34,
+              "z_score": 2.27
+            },
+            "calorie_rate": {
+              "value": 918.06,
+              "mean": 720.42,
+              "z_score": 2.27
+            },
+            "weight_kg": {
+              "value": 121.3,
+              "mean": 73.85,
+              "z_score": 2.24
+            }
+          },
+          "description": "Intensity Index is 2.3\u03c3 higher than average (3.15 vs 2.34 avg). Calorie Rate is 2.3\u03c3 higher than average (918.06 vs 720.42 avg). Weight Kg is 2.2\u03c3 higher than average (121.3 vs 73.85 avg)."
+        },
+        {
+          "row_index": 646,
+          "anomaly_score": -0.0299,
+          "top_deviations": {
+            "calories_burned": {
+              "value": 1675.0,
+              "mean": 905.42,
+              "z_score": 2.82
+            },
+            "fat_percentage": {
+              "value": 10.7,
+              "mean": 24.98,
+              "z_score": 2.28
+            }
+          },
+          "description": "Calories Burned is 2.8\u03c3 higher than average (1675.0 vs 905.42 avg). Fat Percentage is 2.3\u03c3 lower than average (10.7 vs 24.98 avg)."
+        },
+        {
+          "row_index": 569,
+          "anomaly_score": -0.0246,
+          "top_deviations": {
+            "calories_burned": {
+              "value": 331.0,
+              "mean": 905.42,
+              "z_score": 2.11
+            },
+            "session_duration_hours": {
+              "value": 0.54,
+              "mean": 1.26,
+              "z_score": 2.09
+            }
+          },
+          "description": "Calories Burned is 2.1\u03c3 lower than average (331.0 vs 905.42 avg). Session Duration Hours is 2.1\u03c3 lower than average (0.54 vs 1.26 avg)."
+        },
+        {
+          "row_index": 736,
+          "anomaly_score": -0.0245,
+          "top_deviations": {
+            "calories_burned": {
+              "value": 1598.0,
+              "mean": 905.42,
+              "z_score": 2.54
+            },
+            "intensity_index": {
+              "value": 3.19,
+              "mean": 2.34,
+              "z_score": 2.38
+            },
+            "calorie_rate": {
+              "value": 913.14,
+              "mean": 720.42,
+              "z_score": 2.22
+            }
+          },
+          "description": "Calories Burned is 2.5\u03c3 higher than average (1598.0 vs 905.42 avg). Intensity Index is 2.4\u03c3 higher than average (3.19 vs 2.34 avg). Calorie Rate is 2.2\u03c3 higher than average (913.14 vs 720.42 avg)."
+        },
+        {
+          "row_index": 46,
+          "anomaly_score": -0.024,
+          "top_deviations": {
+            "hydration_per_kg": {
+              "value": 0.07,
+              "mean": 0.04,
+              "z_score": 2.72
+            },
+            "calorie_rate": {
+              "value": 919.05,
+              "mean": 720.42,
+              "z_score": 2.28
+            },
+            "intensity_index": {
+              "value": 3.15,
+              "mean": 2.34,
+              "z_score": 2.27
+            }
+          },
+          "description": "Hydration Per Kg is 2.7\u03c3 higher than average (0.07 vs 0.04 avg). Calorie Rate is 2.3\u03c3 higher than average (919.05 vs 720.42 avg). Intensity Index is 2.3\u03c3 higher than average (3.15 vs 2.34 avg)."
+        }
+      ]
+    },
+    "daily_gym": {
+      "dataset": "Daily Attendance",
+      "total_rows": 2600,
+      "anomalies_found": 130,
+      "anomaly_pct": 5.0,
+      "top_anomalies": [
+        {
+          "row_index": 1236,
+          "anomaly_score": -0.0507,
+          "top_deviations": {
+            "calories_burned": {
+              "value": 1104.0,
+              "mean": 523.78,
+              "z_score": 2.41
+            }
+          },
+          "description": "Calories Burned is 2.4\u03c3 higher than average (1104.0 vs 523.78 avg)."
+        },
+        {
+          "row_index": 619,
+          "anomaly_score": -0.0359,
+          "top_deviations": {
+            "calories_burned": {
+              "value": 1130.0,
+              "mean": 523.78,
+              "z_score": 2.52
+            }
+          },
+          "description": "Calories Burned is 2.5\u03c3 higher than average (1130.0 vs 523.78 avg)."
+        },
+        {
+          "row_index": 430,
+          "anomaly_score": -0.0349,
+          "top_deviations": {
+            "calories_burned": {
+              "value": 1087.0,
+              "mean": 523.78,
+              "z_score": 2.34
+            }
+          },
+          "description": "Calories Burned is 2.3\u03c3 higher than average (1087.0 vs 523.78 avg)."
+        },
+        {
+          "row_index": 853,
+          "anomaly_score": -0.0344,
+          "top_deviations": {
+            "calories_burned": {
+              "value": 1072.0,
+              "mean": 523.78,
+              "z_score": 2.28
+            }
+          },
+          "description": "Calories Burned is 2.3\u03c3 higher than average (1072.0 vs 523.78 avg)."
+        },
+        {
+          "row_index": 776,
+          "anomaly_score": -0.0336,
+          "top_deviations": {
+            "calories_burned": {
+              "value": 1093.0,
+              "mean": 523.78,
+              "z_score": 2.37
+            }
+          },
+          "description": "Calories Burned is 2.4\u03c3 higher than average (1093.0 vs 523.78 avg)."
+        },
+        {
+          "row_index": 2002,
+          "anomaly_score": -0.0336,
+          "top_deviations": {
+            "calories_burned": {
+              "value": 1153.0,
+              "mean": 523.78,
+              "z_score": 2.62
+            }
+          },
+          "description": "Calories Burned is 2.6\u03c3 higher than average (1153.0 vs 523.78 avg)."
+        },
+        {
+          "row_index": 641,
+          "anomaly_score": -0.0329,
+          "top_deviations": {
+            "calories_burned": {
+              "value": 1028.0,
+              "mean": 523.78,
+              "z_score": 2.1
+            }
+          },
+          "description": "Calories Burned is 2.1\u03c3 higher than average (1028.0 vs 523.78 avg)."
+        },
+        {
+          "row_index": 456,
+          "anomaly_score": -0.0312,
+          "top_deviations": {},
+          "description": "Unusual combination of feature values"
+        },
+        {
+          "row_index": 1090,
+          "anomaly_score": -0.0309,
+          "top_deviations": {
+            "calories_burned": {
+              "value": 1042.0,
+              "mean": 523.78,
+              "z_score": 2.16
+            }
+          },
+          "description": "Calories Burned is 2.2\u03c3 higher than average (1042.0 vs 523.78 avg)."
+        },
+        {
+          "row_index": 1443,
+          "anomaly_score": -0.0294,
+          "top_deviations": {
+            "calories_burned": {
+              "value": 1127.0,
+              "mean": 523.78,
+              "z_score": 2.51
+            }
+          },
+          "description": "Calories Burned is 2.5\u03c3 higher than average (1127.0 vs 523.78 avg)."
+        }
+      ]
+    },
+    "body_perf": {
+      "dataset": "Body Performance",
+      "total_rows": 13393,
+      "anomalies_found": 670,
+      "anomaly_pct": 5.0,
+      "top_anomalies": [
+        {
+          "row_index": 5622,
+          "anomaly_score": -0.1128,
+          "top_deviations": {
+            "power_endurance_ratio": {
+              "value": 55.0,
+              "mean": 5.67,
+              "z_score": 8.28
+            },
+            "body_fat": {
+              "value": 45.7,
+              "mean": 23.24,
+              "z_score": 3.09
+            },
+            "relative_grip": {
+              "value": 0.2,
+              "mean": 0.54,
+              "z_score": 3.04
+            },
+            "performance_score": {
+              "value": -1.93,
+              "mean": 0.0,
+              "z_score": 2.68
+            },
+            "sit_ups_counts": {
+              "value": 2.0,
+              "mean": 39.77,
+              "z_score": 2.65
+            }
+          },
+          "description": "Power Endurance Ratio is 8.3\u03c3 higher than average (55.0 vs 5.67 avg). Body Fat is 3.1\u03c3 higher than average (45.7 vs 23.24 avg). Relative Grip is 3.0\u03c3 lower than average (0.2 vs 0.54 avg)."
+        },
+        {
+          "row_index": 5972,
+          "anomaly_score": -0.1099,
+          "top_deviations": {
+            "power_endurance_ratio": {
+              "value": 116.0,
+              "mean": 5.67,
+              "z_score": 18.52
+            },
+            "performance_score": {
+              "value": -2.06,
+              "mean": 0.0,
+              "z_score": 2.86
+            },
+            "sit_ups_counts": {
+              "value": 1.0,
+              "mean": 39.77,
+              "z_score": 2.72
+            },
+            "sit_and_bend_forward_cm": {
+              "value": -5.5,
+              "mean": 15.21,
+              "z_score": 2.45
+            },
+            "relative_grip": {
+              "value": 0.27,
+              "mean": 0.54,
+              "z_score": 2.4
+            }
+          },
+          "description": "Power Endurance Ratio is 18.5\u03c3 higher than average (116.0 vs 5.67 avg). Performance Score is 2.9\u03c3 lower than average (-2.06 vs 0.0 avg). Sit Ups Counts is 2.7\u03c3 lower than average (1.0 vs 39.77 avg)."
+        },
+        {
+          "row_index": 2557,
+          "anomaly_score": -0.1097,
+          "top_deviations": {
+            "power_endurance_ratio": {
+              "value": 41.5,
+              "mean": 5.67,
+              "z_score": 6.01
+            },
+            "body_fat": {
+              "value": 43.6,
+              "mean": 23.24,
+              "z_score": 2.81
+            },
+            "broad_jump_cm": {
+              "value": 83.0,
+              "mean": 190.13,
+              "z_score": 2.69
+            },
+            "sit_ups_counts": {
+              "value": 2.0,
+              "mean": 39.77,
+              "z_score": 2.65
+            },
+            "performance_score": {
+              "value": -1.88,
+              "mean": 0.0,
+              "z_score": 2.6
+            }
+          },
+          "description": "Power Endurance Ratio is 6.0\u03c3 higher than average (41.5 vs 5.67 avg). Body Fat is 2.8\u03c3 higher than average (43.6 vs 23.24 avg). Broad Jump Cm is 2.7\u03c3 lower than average (83.0 vs 190.13 avg)."
+        },
+        {
+          "row_index": 13386,
+          "anomaly_score": -0.1086,
+          "top_deviations": {
+            "power_endurance_ratio": {
+              "value": 81.0,
+              "mean": 5.67,
+              "z_score": 12.64
+            },
+            "performance_score": {
+              "value": -2.08,
+              "mean": 0.0,
+              "z_score": 2.88
+            },
+            "broad_jump_cm": {
+              "value": 81.0,
+              "mean": 190.13,
+              "z_score": 2.74
+            },
+            "sit_ups_counts": {
+              "value": 1.0,
+              "mean": 39.77,
+              "z_score": 2.72
+            },
+            "weight_kg": {
+              "value": 40.0,
+              "mean": 67.45,
+              "z_score": 2.3
+            }
+          },
+          "description": "Power Endurance Ratio is 12.6\u03c3 higher than average (81.0 vs 5.67 avg). Performance Score is 2.9\u03c3 lower than average (-2.08 vs 0.0 avg). Broad Jump Cm is 2.7\u03c3 lower than average (81.0 vs 190.13 avg)."
+        },
+        {
+          "row_index": 1841,
+          "anomaly_score": -0.1083,
+          "top_deviations": {
+            "power_endurance_ratio": {
+              "value": 211.0,
+              "mean": 5.67,
+              "z_score": 34.46
+            },
+            "weight_kg": {
+              "value": 109.3,
+              "mean": 67.45,
+              "z_score": 3.5
+            },
+            "sit_ups_counts": {
+              "value": 1.0,
+              "mean": 39.77,
+              "z_score": 2.72
+            },
+            "height_cm": {
+              "value": 187.3,
+              "mean": 168.56,
+              "z_score": 2.22
+            },
+            "body_fat": {
+              "value": 39.3,
+              "mean": 23.24,
+              "z_score": 2.21
+            }
+          },
+          "description": "Power Endurance Ratio is 34.5\u03c3 higher than average (211.0 vs 5.67 avg). Weight Kg is 3.5\u03c3 higher than average (109.3 vs 67.45 avg). Sit Ups Counts is 2.7\u03c3 lower than average (1.0 vs 39.77 avg)."
+        },
+        {
+          "row_index": 7350,
+          "anomaly_score": -0.1049,
+          "top_deviations": {
+            "sit_and_bend_forward_cm": {
+              "value": -16.0,
+              "mean": 15.21,
+              "z_score": 3.69
+            },
+            "performance_score": {
+              "value": -2.58,
+              "mean": 0.0,
+              "z_score": 3.58
+            },
+            "body_fat": {
+              "value": 45.0,
+              "mean": 23.24,
+              "z_score": 3.0
+            },
+            "broad_jump_cm": {
+              "value": 73.0,
+              "mean": 190.13,
+              "z_score": 2.94
+            },
+            "sit_ups_counts": {
+              "value": 0.0,
+              "mean": 39.77,
+              "z_score": 2.79
+            }
+          },
+          "description": "Sit And Bend Forward Cm is 3.7\u03c3 lower than average (-16.0 vs 15.21 avg). Performance Score is 3.6\u03c3 lower than average (-2.58 vs 0.0 avg). Body Fat is 3.0\u03c3 higher than average (45.0 vs 23.24 avg)."
+        },
+        {
+          "row_index": 3705,
+          "anomaly_score": -0.1035,
+          "top_deviations": {
+            "power_endurance_ratio": {
+              "value": 41.5,
+              "mean": 5.67,
+              "z_score": 6.01
+            },
+            "height_cm": {
+              "value": 144.9,
+              "mean": 168.56,
+              "z_score": 2.81
+            },
+            "performance_score": {
+              "value": -1.99,
+              "mean": 0.0,
+              "z_score": 2.75
+            },
+            "broad_jump_cm": {
+              "value": 83.0,
+              "mean": 190.13,
+              "z_score": 2.69
+            },
+            "sit_ups_counts": {
+              "value": 2.0,
+              "mean": 39.77,
+              "z_score": 2.65
+            }
+          },
+          "description": "Power Endurance Ratio is 6.0\u03c3 higher than average (41.5 vs 5.67 avg). Height Cm is 2.8\u03c3 lower than average (144.9 vs 168.56 avg). Performance Score is 2.8\u03c3 lower than average (-1.99 vs 0.0 avg)."
+        },
+        {
+          "row_index": 12884,
+          "anomaly_score": -0.1007,
+          "top_deviations": {
+            "power_endurance_ratio": {
+              "value": 27.5,
+              "mean": 5.67,
+              "z_score": 3.66
+            },
+            "body_fat": {
+              "value": 48.3,
+              "mean": 23.24,
+              "z_score": 3.45
+            },
+            "performance_score": {
+              "value": -1.92,
+              "mean": 0.0,
+              "z_score": 2.67
+            },
+            "relative_grip": {
+              "value": 0.24,
+              "mean": 0.54,
+              "z_score": 2.66
+            },
+            "sit_ups_counts": {
+              "value": 4.0,
+              "mean": 39.77,
+              "z_score": 2.51
+            }
+          },
+          "description": "Power Endurance Ratio is 3.7\u03c3 higher than average (27.5 vs 5.67 avg). Body Fat is 3.5\u03c3 higher than average (48.3 vs 23.24 avg). Performance Score is 2.7\u03c3 lower than average (-1.92 vs 0.0 avg)."
+        },
+        {
+          "row_index": 4900,
+          "anomaly_score": -0.1002,
+          "top_deviations": {
+            "broad_jump_cm": {
+              "value": 0.0,
+              "mean": 190.13,
+              "z_score": 4.77
+            },
+            "pulse_pressure": {
+              "value": 84.0,
+              "mean": 51.44,
+              "z_score": 3.0
+            },
+            "diastolic": {
+              "value": 47.0,
+              "mean": 78.8,
+              "z_score": 2.96
+            },
+            "performance_score": {
+              "value": -2.11,
+              "mean": 0.0,
+              "z_score": 2.93
+            },
+            "sit_ups_counts": {
+              "value": 0.0,
+              "mean": 39.77,
+              "z_score": 2.79
+            }
+          },
+          "description": "Broad Jump Cm is 4.8\u03c3 lower than average (0.0 vs 190.13 avg). Pulse Pressure is 3.0\u03c3 higher than average (84.0 vs 51.44 avg). Diastolic is 3.0\u03c3 lower than average (47.0 vs 78.8 avg)."
+        },
+        {
+          "row_index": 10430,
+          "anomaly_score": -0.0987,
+          "top_deviations": {
+            "body_fat": {
+              "value": 45.1,
+              "mean": 23.24,
+              "z_score": 3.01
+            },
+            "sit_ups_counts": {
+              "value": 0.0,
+              "mean": 39.77,
+              "z_score": 2.79
+            },
+            "performance_score": {
+              "value": -2.0,
+              "mean": 0.0,
+              "z_score": 2.77
+            },
+            "broad_jump_cm": {
+              "value": 89.0,
+              "mean": 190.13,
+              "z_score": 2.54
+            },
+            "diastolic": {
+              "value": 53.0,
+              "mean": 78.8,
+              "z_score": 2.4
+            }
+          },
+          "description": "Body Fat is 3.0\u03c3 higher than average (45.1 vs 23.24 avg). Sit Ups Counts is 2.8\u03c3 lower than average (0.0 vs 39.77 avg). Performance Score is 2.8\u03c3 lower than average (-2.0 vs 0.0 avg)."
+        }
+      ]
+    },
+    "calories_exercise": {
+      "dataset": "Calorie Tracking",
+      "total_rows": 15000,
+      "anomalies_found": 750,
+      "anomaly_pct": 5.0,
+      "top_anomalies": [
+        {
+          "row_index": 1444,
+          "anomaly_score": -0.0958,
+          "top_deviations": {
+            "calorie_rate": {
+              "value": 9.68,
+              "mean": 5.2,
+              "z_score": 3.16
+            },
+            "calories": {
+              "value": 271.0,
+              "mean": 89.54,
+              "z_score": 2.91
+            },
+            "heart_rate": {
+              "value": 121.0,
+              "mean": 95.52,
+              "z_score": 2.66
+            },
+            "exertion_index": {
+              "value": 49.85,
+              "mean": 38.29,
+              "z_score": 2.62
+            }
+          },
+          "description": "Calorie Rate is 3.2\u03c3 higher than average (9.68 vs 5.2 avg). Calories is 2.9\u03c3 higher than average (271.0 vs 89.54 avg). Heart Rate is 2.7\u03c3 higher than average (121.0 vs 95.52 avg)."
+        },
+        {
+          "row_index": 14001,
+          "anomaly_score": -0.0872,
+          "top_deviations": {
+            "calorie_rate": {
+              "value": 9.9,
+              "mean": 5.2,
+              "z_score": 3.32
+            },
+            "calories": {
+              "value": 287.0,
+              "mean": 89.54,
+              "z_score": 3.16
+            },
+            "heart_rate": {
+              "value": 116.0,
+              "mean": 95.52,
+              "z_score": 2.14
+            },
+            "exertion_index": {
+              "value": 47.56,
+              "mean": 38.29,
+              "z_score": 2.1
+            }
+          },
+          "description": "Calorie Rate is 3.3\u03c3 higher than average (9.9 vs 5.2 avg). Calories is 3.2\u03c3 higher than average (287.0 vs 89.54 avg). Heart Rate is 2.1\u03c3 higher than average (116.0 vs 95.52 avg)."
+        },
+        {
+          "row_index": 5662,
+          "anomaly_score": -0.0818,
+          "top_deviations": {
+            "calorie_rate": {
+              "value": 9.85,
+              "mean": 5.2,
+              "z_score": 3.29
+            },
+            "weight": {
+              "value": 121.0,
+              "mean": 74.97,
+              "z_score": 3.06
+            },
+            "calories": {
+              "value": 266.0,
+              "mean": 89.54,
+              "z_score": 2.83
+            },
+            "height": {
+              "value": 213.0,
+              "mean": 174.47,
+              "z_score": 2.7
+            }
+          },
+          "description": "Calorie Rate is 3.3\u03c3 higher than average (9.85 vs 5.2 avg). Weight is 3.1\u03c3 higher than average (121.0 vs 74.97 avg). Calories is 2.8\u03c3 higher than average (266.0 vs 89.54 avg)."
+        },
+        {
+          "row_index": 14147,
+          "anomaly_score": -0.078,
+          "top_deviations": {
+            "body_temp": {
+              "value": 37.5,
+              "mean": 40.03,
+              "z_score": 3.24
+            },
+            "exertion_index": {
+              "value": 26.25,
+              "mean": 38.29,
+              "z_score": 2.73
+            },
+            "heart_rate": {
+              "value": 70.0,
+              "mean": 95.52,
+              "z_score": 2.66
+            }
+          },
+          "description": "Body Temp is 3.2\u03c3 lower than average (37.5 vs 40.03 avg). Exertion Index is 2.7\u03c3 lower than average (26.25 vs 38.29 avg). Heart Rate is 2.7\u03c3 lower than average (70.0 vs 95.52 avg)."
+        },
+        {
+          "row_index": 9632,
+          "anomaly_score": -0.0724,
+          "top_deviations": {
+            "body_temp": {
+              "value": 37.7,
+              "mean": 40.03,
+              "z_score": 2.98
+            },
+            "calorie_rate": {
+              "value": 1.0,
+              "mean": 5.2,
+              "z_score": 2.97
+            },
+            "exertion_index": {
+              "value": 27.9,
+              "mean": 38.29,
+              "z_score": 2.35
+            },
+            "heart_rate": {
+              "value": 74.0,
+              "mean": 95.52,
+              "z_score": 2.25
+            }
+          },
+          "description": "Body Temp is 3.0\u03c3 lower than average (37.7 vs 40.03 avg). Calorie Rate is 3.0\u03c3 lower than average (1.0 vs 5.2 avg). Exertion Index is 2.4\u03c3 lower than average (27.9 vs 38.29 avg)."
+        },
+        {
+          "row_index": 13871,
+          "anomaly_score": -0.0719,
+          "top_deviations": {
+            "calorie_rate": {
+              "value": 10.17,
+              "mean": 5.2,
+              "z_score": 3.51
+            },
+            "calories": {
+              "value": 295.0,
+              "mean": 89.54,
+              "z_score": 3.29
+            },
+            "heart_rate": {
+              "value": 120.0,
+              "mean": 95.52,
+              "z_score": 2.55
+            },
+            "exertion_index": {
+              "value": 48.96,
+              "mean": 38.29,
+              "z_score": 2.42
+            }
+          },
+          "description": "Calorie Rate is 3.5\u03c3 higher than average (10.17 vs 5.2 avg). Calories is 3.3\u03c3 higher than average (295.0 vs 89.54 avg). Heart Rate is 2.5\u03c3 higher than average (120.0 vs 95.52 avg)."
+        },
+        {
+          "row_index": 1661,
+          "anomaly_score": -0.0705,
+          "top_deviations": {
+            "calorie_rate": {
+              "value": 9.52,
+              "mean": 5.2,
+              "z_score": 3.05
+            },
+            "calories": {
+              "value": 276.0,
+              "mean": 89.54,
+              "z_score": 2.99
+            },
+            "weight": {
+              "value": 113.0,
+              "mean": 74.97,
+              "z_score": 2.53
+            },
+            "height": {
+              "value": 208.0,
+              "mean": 174.47,
+              "z_score": 2.35
+            },
+            "heart_rate": {
+              "value": 116.0,
+              "mean": 95.52,
+              "z_score": 2.14
+            }
+          },
+          "description": "Calorie Rate is 3.0\u03c3 higher than average (9.52 vs 5.2 avg). Calories is 3.0\u03c3 higher than average (276.0 vs 89.54 avg). Weight is 2.5\u03c3 higher than average (113.0 vs 74.97 avg)."
+        },
+        {
+          "row_index": 3357,
+          "anomaly_score": -0.0693,
+          "top_deviations": {
+            "calorie_rate": {
+              "value": 10.93,
+              "mean": 5.2,
+              "z_score": 4.05
+            },
+            "calories": {
+              "value": 295.0,
+              "mean": 89.54,
+              "z_score": 3.29
+            },
+            "heart_rate": {
+              "value": 125.0,
+              "mean": 95.52,
+              "z_score": 3.08
+            },
+            "exertion_index": {
+              "value": 51.12,
+              "mean": 38.29,
+              "z_score": 2.91
+            }
+          },
+          "description": "Calorie Rate is 4.0\u03c3 higher than average (10.93 vs 5.2 avg). Calories is 3.3\u03c3 higher than average (295.0 vs 89.54 avg). Heart Rate is 3.1\u03c3 higher than average (125.0 vs 95.52 avg)."
+        },
+        {
+          "row_index": 4350,
+          "anomaly_score": -0.0692,
+          "top_deviations": {
+            "height": {
+              "value": 138.0,
+              "mean": 174.47,
+              "z_score": 2.56
+            },
+            "weight": {
+              "value": 41.0,
+              "mean": 74.97,
+              "z_score": 2.26
+            },
+            "calories": {
+              "value": 228.0,
+              "mean": 89.54,
+              "z_score": 2.22
+            }
+          },
+          "description": "Height is 2.6\u03c3 lower than average (138.0 vs 174.47 avg). Weight is 2.3\u03c3 lower than average (41.0 vs 74.97 avg). Calories is 2.2\u03c3 higher than average (228.0 vs 89.54 avg)."
+        },
+        {
+          "row_index": 14875,
+          "anomaly_score": -0.0691,
+          "top_deviations": {
+            "height": {
+              "value": 138.0,
+              "mean": 174.47,
+              "z_score": 2.56
+            },
+            "heart_rate": {
+              "value": 117.0,
+              "mean": 95.52,
+              "z_score": 2.24
+            },
+            "calorie_rate": {
+              "value": 8.12,
+              "mean": 5.2,
+              "z_score": 2.06
+            },
+            "exertion_index": {
+              "value": 47.38,
+              "mean": 38.29,
+              "z_score": 2.06
+            }
+          },
+          "description": "Height is 2.6\u03c3 lower than average (138.0 vs 174.47 avg). Heart Rate is 2.2\u03c3 higher than average (117.0 vs 95.52 avg). Calorie Rate is 2.1\u03c3 higher than average (8.12 vs 5.2 avg)."
+        }
+      ]
+    }
+  }
+}

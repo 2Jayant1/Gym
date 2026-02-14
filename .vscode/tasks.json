@@ -1,0 +1,84 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Frontend Dev Server",
+			"type": "shell",
+			"command": "npm --prefix Frontend run dev",
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build",
+			"windows": {
+				"options": {
+					"shell": {
+						"executable": "cmd.exe",
+						"args": ["/d", "/s", "/c"]
+					}
+				}
+			}
+		},
+		{
+			"label": "Backend Server",
+			"type": "shell",
+			"command": "npm --prefix Backend run dev",
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build",
+			"windows": {
+				"options": {
+					"shell": {
+						"executable": "cmd.exe",
+						"args": ["/d", "/s", "/c"]
+					}
+				}
+			}
+		},
+		{
+			"label": "Install Dependencies",
+			"type": "shell",
+			"command": "npm install",
+			"isBackground": false,
+			"problemMatcher": [],
+			"windows": {
+				"options": {
+					"shell": {
+						"executable": "cmd.exe",
+						"args": ["/d", "/s", "/c"]
+					}
+				}
+			}
+		},
+		{
+			"label": "ML Training Pipeline",
+			"type": "shell",
+			"command": "python train.py",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build",
+			"windows": {
+				"options": {
+					"shell": {
+						"executable": "cmd.exe",
+						"args": ["/d", "/s", "/c"]
+					}
+				}
+			}
+		},
+		{
+			"label": "ML Serving API",
+			"type": "shell",
+			"command": "python train.py --step serve",
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build",
+			"windows": {
+				"options": {
+					"shell": {
+						"executable": "cmd.exe",
+						"args": ["/d", "/s", "/c"]
+					}
+				}
+			}
+		}
+	]
+}

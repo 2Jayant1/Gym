@@ -1,0 +1,126 @@
+[
+  {
+    "version": "v1",
+    "trained_at": "2026-02-13T16:11:56.623482+00:00",
+    "name": "workout_recommender",
+    "algorithm": "LightGBM",
+    "type": "classifier",
+    "metrics": {
+      "f1_weighted": 0.2593,
+      "roc_auc_ovr": 0.5143
+    },
+    "features": [
+      "age",
+      "gender",
+      "weight_kg",
+      "height_m",
+      "max_bpm",
+      "avg_bpm",
+      "resting_bpm",
+      "session_duration_hours",
+      "calories_burned",
+      "fat_percentage",
+      "water_intake_liters",
+      "workout_frequency_days_week",
+      "experience_level",
+      "bmi",
+      "intensity_index",
+      "cardio_efficiency",
+      "calorie_rate",
+      "bmi_category",
+      "hydration_per_kg"
+    ],
+    "n_train": 778,
+    "n_test": 195
+  },
+  {
+    "version": "v2",
+    "trained_at": "2026-02-13T16:11:56.623482+00:00",
+    "name": "calorie_predictor",
+    "algorithm": "LightGBM",
+    "type": "regressor",
+    "metrics": {
+      "mae": 0.6026,
+      "rmse": 1.0439
+    },
+    "features": [
+      "user_id",
+      "gender",
+      "age",
+      "height",
+      "weight",
+      "duration",
+      "heart_rate",
+      "body_temp",
+      "member_id_x",
+      "_source_x",
+      "member_id_y",
+      "_source_y",
+      "calorie_rate",
+      "exertion_index",
+      "bmi"
+    ],
+    "n_train": 12000,
+    "n_test": 3000
+  },
+  {
+    "version": "v3",
+    "trained_at": "2026-02-13T16:11:56.623482+00:00",
+    "name": "adherence_predictor",
+    "algorithm": "XGBoost",
+    "type": "classifier",
+    "metrics": {
+      "f1": 1.0,
+      "roc_auc": 1.0
+    },
+    "features": [
+      "age",
+      "gender",
+      "membership_type",
+      "workout_type",
+      "workout_duration_minutes",
+      "calories_burned",
+      "check_in_time",
+      "attendance_status",
+      "day_of_week",
+      "month",
+      "attended",
+      "calorie_rate_per_min",
+      "total_visits",
+      "adherence_score",
+      "missed_session_rate"
+    ],
+    "n_train": 2080,
+    "n_test": 520
+  },
+  {
+    "version": "v4",
+    "trained_at": "2026-02-13T16:11:56.623482+00:00",
+    "name": "progress_forecaster",
+    "algorithm": "XGBoost",
+    "type": "regressor",
+    "metrics": {
+      "mae": 0.0249,
+      "rmse": 0.0923
+    },
+    "features": [
+      "age",
+      "gender",
+      "height_cm",
+      "weight_kg",
+      "body_fat",
+      "diastolic",
+      "systolic",
+      "gripforce",
+      "sit_and_bend_forward_cm",
+      "sit_ups_counts",
+      "broad_jump_cm",
+      "class",
+      "relative_grip",
+      "power_endurance_ratio",
+      "pulse_pressure"
+    ],
+    "n_train": 10714,
+    "n_test": 2679
+  }
+]

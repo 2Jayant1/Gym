@@ -1,0 +1,31 @@
+# FitFlex Gym Management — Production Compose (secure defaults)
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+#
+# Notes:
+# - Exposes only Nginx (80/443). DB/cache are internal.
+# - Set AUTH_SECRET + CORS_ORIGIN in your environment or .env.
+
+services:
+  mongo:
+    ports: []
+
+  redis:
+    ports: []
+
+  app:
+    ports: []
+
+  ml:
+    ports: []
+    environment:
+      DISABLE_AUTH: 'false'
+
+  ollama:
+    # In production you may disable this and use Groq/OpenAI instead.
+    ports: []
+
+  nginx:
+    ports:
+      - '80:80'
+      - '443:443'

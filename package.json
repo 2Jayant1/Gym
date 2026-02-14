@@ -1,0 +1,21 @@
+{
+  "name": "gym-management-system",
+  "private": true,
+  "workspaces": [
+    "Backend",
+    "Frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently -n backend,frontend -c blue,green \"npm --prefix Backend run dev\" \"npm --prefix Frontend run dev\"",
+    "start": "concurrently -n backend,frontend -c blue,green \"npm --prefix Backend start\" \"npm --prefix Frontend start\"",
+    "build": "npm --prefix Frontend run build",
+    "lint": "npm --prefix Frontend run lint",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "smoke": "npm --prefix Backend run smoke"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prettier": "^3.2.5"
+  }
+}
