@@ -4,7 +4,7 @@
 		{
 			"label": "Frontend Dev Server",
 			"type": "shell",
-			"command": "npm --prefix Frontend run dev",
+			"command": "pnpm --filter @fitflex/web dev",
 			"isBackground": true,
 			"problemMatcher": [],
 			"group": "build",
@@ -20,7 +20,7 @@
 		{
 			"label": "Backend Server",
 			"type": "shell",
-			"command": "npm --prefix Backend run dev",
+			"command": "pnpm --filter @fitflex/api dev",
 			"isBackground": true,
 			"problemMatcher": [],
 			"group": "build",
@@ -36,7 +36,7 @@
 		{
 			"label": "Install Dependencies",
 			"type": "shell",
-			"command": "npm install",
+			"command": "pnpm install --recursive",
 			"isBackground": false,
 			"problemMatcher": [],
 			"windows": {
@@ -51,7 +51,7 @@
 		{
 			"label": "ML Training Pipeline",
 			"type": "shell",
-			"command": "python train.py",
+			"command": "python services/ml/train.py",
 			"isBackground": false,
 			"problemMatcher": [],
 			"group": "build",
@@ -67,7 +67,7 @@
 		{
 			"label": "ML Serving API",
 			"type": "shell",
-			"command": "python train.py --step serve",
+			"command": "python services/ml/train.py --step serve",
 			"isBackground": true,
 			"problemMatcher": [],
 			"group": "build",

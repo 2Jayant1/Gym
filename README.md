@@ -53,29 +53,30 @@
 
 **Frontend**: React 18.2, Vite 4.5, Tailwind CSS 3.3, Framer Motion 10, Lucide React, Axios
 
-**DevOps**: Docker (multi-stage), Docker Compose, Nginx reverse proxy, GitHub Actions CI/CD
+**DevOps**: pnpm workspaces monorepo, Docker (multi-stage), Docker Compose, Nginx reverse proxy, GitHub Actions CI/CD
 
 ---
 
 ## Getting Started
 
+npm run dev:backend      # or: cd Backend && npm run dev
+npm run dev:frontend     # or: cd Frontend && npm run dev
 ### Prerequisites
 
-- Node.js ≥ 18 (20 recommended) · MongoDB ≥ 6.0 · npm ≥ 9
+- Node.js ≥ 20 · pnpm ≥ 9 · MongoDB ≥ 6.0
 
-### Quick Start
+### Quick Start (monorepo)
 
 ```bash
-cd "Gym Management System"
-npm install
-cp .env.example Backend/.env
-# Edit Backend/.env — set MONGODB_URI and AUTH_SECRET
+pnpm install --recursive
+cp apps/api/.env.example apps/api/.env
+# Edit apps/api/.env — set MONGODB_URI and AUTH_SECRET
 
 # Start backend (hot reload)
-npm run dev:backend      # or: cd Backend && npm run dev
+pnpm --filter @fitflex/api dev
 
 # Start frontend (separate terminal)
-npm run dev:frontend     # or: cd Frontend && npm run dev
+pnpm --filter @fitflex/web dev
 ```
 
 - Frontend: `http://localhost:3000` (proxies `/api` → backend)

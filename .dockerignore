@@ -1,4 +1,5 @@
 node_modules
+.pnpm-store
 .git
 .gitignore
 coverage
@@ -6,9 +7,12 @@ coverage
 .env*
 .vscode
 .DS_Store
-Backend/node_modules
-Frontend/node_modules
-Frontend/dist
+apps/api/node_modules
+apps/web/node_modules
+apps/web/dist
+services/ml/__pycache__
+services/ml/data
+services/ml/models
 __tests__
 *.test.js
 *.spec.js
@@ -18,3 +22,5 @@ docker-compose*.yml
 Dockerfile
 nginx/
 .github/
+apps/api/coverage
+apps/web/coverage

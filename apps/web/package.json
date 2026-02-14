@@ -1,8 +1,11 @@
 {
-  "name": "gym-management-frontend",
+  "name": "@fitflex/web",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "vite",
     "start": "vite",
@@ -11,11 +14,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "axios": "^1.5.0",
     "framer-motion": "^10.16.4",
     "lucide-react": "^0.288.0",
-    "axios": "^1.5.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.3",

@@ -1,16 +1,21 @@
 # ─── Dependencies ─────────────────────────────────
 node_modules/
+.pnpm-store/
+.npm-temp/
 
 # ─── Environment variables (secrets) ──────────────
 .env
 .env.local
 .env.*.local
 Backend/.env
+apps/api/.env
+apps/web/.env
 
 # ─── Build output ─────────────────────────────────
 dist/
 build/
-Frontend/dist/
+apps/web/dist/
+apps/api/build/
 
 # ─── Test / Coverage ──────────────────────────────
 coverage/
@@ -40,9 +45,9 @@ redis_data/
 # ─── Misc ─────────────────────────────────────────
 *.tgz
 .eslintcache
-Backend/gym_management.db
-data/raw/
-data/processed/
+apps/api/gym_management.db
+services/ml/data/raw/
+services/ml/data/processed/
 *.zip
 kaggle.json
 nul

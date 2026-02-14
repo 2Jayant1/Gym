@@ -1,21 +1,33 @@
 {
-  "name": "gym-management-system",
+  "name": "@fitflex/monorepo",
+  "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@9.0.6",
+  "engines": {
+    "node": ">=20"
+  },
   "workspaces": [
-    "Backend",
-    "Frontend"
+    "apps/*",
+    "services/*",
+    "packages/*"
   ],
   "scripts": {
-    "dev": "concurrently -n backend,frontend -c blue,green \"npm --prefix Backend run dev\" \"npm --prefix Frontend run dev\"",
-    "start": "concurrently -n backend,frontend -c blue,green \"npm --prefix Backend start\" \"npm --prefix Frontend start\"",
-    "build": "npm --prefix Frontend run build",
-    "lint": "npm --prefix Frontend run lint",
-    "format": "prettier . --write",
-    "format:check": "prettier . --check",
-    "smoke": "npm --prefix Backend run smoke"
+    "prepare": "husky install",
+    "install:ci": "pnpm install --frozen-lockfile --recursive",
+    "dev": "pnpm --parallel --filter ./apps/** dev",
+    "dev:api": "pnpm --filter @fitflex/api dev",
+    "dev:web": "pnpm --filter @fitflex/web dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "format": "pnpm -r format"
   },
   "devDependencies": {
+    "@commitlint/cli": "^18.6.1",
+    "@commitlint/config-conventional": "^18.6.1",
     "concurrently": "^8.2.2",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.2.0",
     "prettier": "^3.2.5"
   }
 }

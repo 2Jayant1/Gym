@@ -1,0 +1,11 @@
+{
+  "name": "@fitflex/domain",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Domain layer contracts and entities",
+  "exports": {
+    "./entities": "./src/entities/index.js",
+    "./repositories": "./src/repositories/index.js"
+  }
+}

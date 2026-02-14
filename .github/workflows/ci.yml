@@ -20,16 +20,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'pnpm'
+
+      - name: Enable corepack
+        run: corepack enable
 
       - name: Install dependencies
-        run: npm ci --workspaces --include-workspace-root
+        run: pnpm install --recursive --ignore-scripts
 
       - name: Run ESLint
-        run: npx eslint . --ext .js,.jsx --max-warnings 10
+        run: pnpm exec eslint . --ext .js,.jsx --max-warnings 10
 
       - name: Check Prettier formatting
-        run: npx prettier . --check
+        run: pnpm exec prettier . --check
 
   # ─── Test (Backend) ────────────────────────────────────────
   test-backend:
@@ -57,20 +60,23 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'pnpm'
+
+      - name: Enable corepack
+        run: corepack enable
 
       - name: Install Backend dependencies
-        run: npm ci --workspace=Backend
+        run: pnpm install --recursive --ignore-scripts
 
       - name: Run unit tests
-        run: cd Backend && npm test -- --coverage --forceExit --detectOpenHandles
+        run: pnpm --filter @fitflex/api test:coverage -- --detectOpenHandles
 
       - name: Upload coverage
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: backend-coverage
-          path: Backend/coverage/
+          path: apps/api/coverage/
 
   # ─── Build (Frontend) ─────────────────────────────────────
   build-frontend:
@@ -82,19 +88,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'pnpm'
+
+      - name: Enable corepack
+        run: corepack enable
 
       - name: Install Frontend dependencies
-        run: npm ci --workspace=Frontend
+        run: pnpm install --recursive --ignore-scripts
 
       - name: Build
-        run: cd Frontend && npm run build
+        run: pnpm --filter @fitflex/web build
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: frontend-dist
-          path: Frontend/dist/
+          path: apps/web/dist/
 
   # ─── Check (ML API) ──────────────────────────────────────
   check-ml:
@@ -112,16 +121,16 @@ jobs:
           cache: 'pip'
 
       - name: Install ML dependencies
-        run: python -m pip install --upgrade pip && pip install -r requirements-ml.txt
+        run: python -m pip install --upgrade pip && pip install -r services/ml/requirements-ml.txt
 
       - name: Syntax check
-        run: python -m compileall serving training
+        run: python -m compileall services/ml/serving services/ml/training
 
       - name: Import check
         env:
           AUTH_SECRET: test-secret-at-least-8
           DISABLE_AUTH: 'true'
-        run: python -c "import serving.api; print('ml api import ok')"
+        run: python -c "import sys; sys.path.insert(0, 'services/ml'); import serving.api; print('ml api import ok')"
 
   # ─── Docker Build ──────────────────────────────────────────
   docker:

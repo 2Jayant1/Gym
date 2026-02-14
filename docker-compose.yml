@@ -68,7 +68,7 @@ services:
   ml:
     build:
       context: .
-      dockerfile: Dockerfile.ml
+      dockerfile: services/ml/Dockerfile.ml
     container_name: fitflex-ml
     restart: unless-stopped
     ports:
@@ -79,9 +79,9 @@ services:
       DISABLE_AUTH: 'false'
       OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://ollama:11434}
     volumes:
-      - ./models:/app/models
-      - ./data:/app/data
-      - ./configs:/app/configs
+      - ./services/ml/models:/app/services/ml/models
+      - ./services/ml/data:/app/services/ml/data
+      - ./services/ml/configs:/app/services/ml/configs
     depends_on:
       app:
         condition: service_healthy
