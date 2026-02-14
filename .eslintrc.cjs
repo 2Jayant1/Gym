@@ -21,7 +21,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['Frontend/**/*.{js,jsx}'],
+      files: ['apps/web/**/*.{js,jsx}'],
       env: { browser: true },
       parserOptions: { ecmaFeatures: { jsx: true } },
       plugins: ['react', 'react-hooks'],

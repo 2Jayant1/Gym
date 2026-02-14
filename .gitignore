@@ -46,8 +46,8 @@ redis_data/
 *.tgz
 .eslintcache
 apps/api/gym_management.db
-services/ml/data/raw/
-services/ml/data/processed/
+services/ml/data/
+services/ml/models/
 *.zip
 kaggle.json
 nul
