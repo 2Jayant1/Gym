@@ -13,6 +13,7 @@ function createRepositories(models) {
     membershipPlan:      new BaseRepository(models.MembershipPlan),
     attendance:          new BaseRepository(models.Attendance),
     accessLog:           new BaseRepository(models.AccessLog),
+    refreshToken:        new BaseRepository(models.RefreshToken),
     invoice:             new BaseRepository(models.Invoice),
     payment:             new BaseRepository(models.Payment),
     trainer:             new BaseRepository(models.Trainer),

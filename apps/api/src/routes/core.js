@@ -20,20 +20,20 @@ function coreRoutes({ services, models, requireAuth, requireRole, authLimiter })
 
   /* ─── Auth — Login ──────────────────────────────────── */
   router.post('/auth/login', authLimiter, validate(loginSchema), asyncHandler(async (req, res) => {
-    const result = await services.auth.login(req.validated);
+    const result = await services.auth.login(req.validated, { ip: req.ip, userAgent: req.headers['user-agent'] });
     res.json(result);
   }));
 
   /* ─── Auth — Register ───────────────────────────────── */
   router.post('/auth/register', authLimiter, validate(registerSchema), asyncHandler(async (req, res) => {
-    const result = await services.auth.register(req.validated);
+    const result = await services.auth.register(req.validated, { ip: req.ip, userAgent: req.headers['user-agent'] });
     res.status(201).json(result);
   }));
 
   /* ─── Auth — Refresh Token (rotation) ───────────────── */
   router.post('/auth/refresh', asyncHandler(async (req, res) => {
     const { refreshToken } = req.body || {};
-    const result = await services.auth.refresh(refreshToken);
+    const result = await services.auth.refresh(refreshToken, { ip: req.ip, userAgent: req.headers['user-agent'] });
     res.json(result);
   }));
 

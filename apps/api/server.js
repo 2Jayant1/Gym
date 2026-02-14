@@ -187,7 +187,7 @@ app.use('/api/me',      meRoutes({ services, requireAuth: authMw }));
    Serve the Vite build output bundled into the Docker image.
    ═══════════════════════════════════════════════════════════════ */
 if (config.NODE_ENV === 'production') {
-  const distPath = path.join(__dirname, '..', 'Frontend', 'dist');
+  const distPath = path.join(__dirname, '..', 'web', 'dist');
   app.use(express.static(distPath));
   app.get('*', (req, res, next) => {
     // Keep API/metrics routes handled by Express routers

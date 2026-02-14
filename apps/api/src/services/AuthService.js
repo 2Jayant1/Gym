@@ -20,16 +20,55 @@ class AuthService {
     this.config = config;
   }
 
-  /* ─── Token helpers ───────────────────────────────────── */
+  /* ─── Helpers ─────────────────────────────────────────── */
 
-  signAccessToken(payload) {
+  refreshTtlMs() {
+    return (this.config.REFRESH_TOKEN_TTL_DAYS || 7) * 24 * 60 * 60 * 1000;
+  }
+
+  hashToken(token) {
+    return crypto.createHash('sha256').update(token).digest('hex');
+  }
+
+  buildUserPayload(user) {
+    return {
+      id: user.id || user._id,
+      role: user.role,
+      name: user.name,
+      email: user.email,
+      username: user.username,
+    };
+  }
+
+  async persistRefreshToken({ userId, tokenFamily, jti, token, context }) {
+    const tokenHash = this.hashToken(token);
+    const expiresAt = new Date(Date.now() + this.refreshTtlMs());
+    await this.repos.refreshToken.create({
+      user: userId,
+      tokenFamily,
+      jti,
+      tokenHash,
+      expiresAt,
+      ip: context?.ip,
+      userAgent: context?.userAgent,
+    });
+  }
+
+  async revokeFamily({ userId, tokenFamily, reason }) {
+    await this.repos.refreshToken.updateMany(
+      { user: userId, tokenFamily, revokedAt: { $exists: false } },
+      { revokedAt: new Date(), revokedReason: reason || 'revoked' },
+    );
+  }
+
+  issueAccessToken(payload) {
     return jwt.sign(payload, this.config.AUTH_SECRET, {
       expiresIn: this.config.JWT_EXPIRES_IN,
     });
   }
 
-  signRefreshToken(payload) {
-    return jwt.sign(payload, this.config.AUTH_SECRET, {
+  issueRefreshToken({ userId, tokenFamily, jti }) {
+    return jwt.sign({ id: userId, tokenFamily, jti }, this.config.AUTH_SECRET, {
       expiresIn: this.config.JWT_REFRESH_EXPIRES_IN || '7d',
     });
   }
@@ -41,7 +80,7 @@ class AuthService {
 
   /* ─── Login ───────────────────────────────────────────── */
 
-  async login({ email, username, password }) {
+  async login({ email, username, password }, context = {}) {
     if (!password || (!email && !username)) {
       throw AppError.badRequest('email or username and password are required');
     }
@@ -57,24 +96,20 @@ class AuthService {
     user.lastLoginAt = new Date();
     user.save().catch(() => {});
 
-    const tokenPayload = {
-      id: user.id, role: user.role, name: user.name,
-      email: user.email, username: user.username,
-    };
+    const tokenPayload = this.buildUserPayload(user);
+    const tokenFamily = crypto.randomUUID();
+    const jti = crypto.randomUUID();
 
-    const accessToken = this.signAccessToken(tokenPayload);
-    const refreshToken = this.signRefreshToken({ id: user.id, tokenFamily: crypto.randomUUID() });
+    const accessToken = this.issueAccessToken(tokenPayload);
+    const refreshToken = this.issueRefreshToken({ userId: user.id, tokenFamily, jti });
+    await this.persistRefreshToken({ userId: user.id, tokenFamily, jti, token: refreshToken, context });
 
-    return {
-      token: accessToken,
-      refreshToken,
-      user: tokenPayload,
-    };
+    return { token: accessToken, refreshToken, user: tokenPayload };
   }
 
   /* ─── Register ────────────────────────────────────────── */
 
-  async register(data) {
+  async register(data, context = {}) {
     const { name, username, email, password, phone, dateOfBirth, gender, fitnessGoals } = data;
 
     const existing = await this.repos.user.findOne({
@@ -110,37 +145,61 @@ class AuthService {
       type: 'success',
     }).catch(() => {});
 
-    const tokenPayload = {
-      id: user.id, role: user.role, name: user.name,
-      email: user.email, username: user.username,
-    };
+    const tokenPayload = this.buildUserPayload(user);
+    const tokenFamily = crypto.randomUUID();
+    const jti = crypto.randomUUID();
 
-    const accessToken = this.signAccessToken(tokenPayload);
-    const refreshToken = this.signRefreshToken({ id: user.id, tokenFamily: crypto.randomUUID() });
+    const accessToken = this.issueAccessToken(tokenPayload);
+    const refreshToken = this.issueRefreshToken({ userId: user.id, tokenFamily, jti });
+    await this.persistRefreshToken({ userId: user.id, tokenFamily, jti, token: refreshToken, context });
 
     return { token: accessToken, refreshToken, user: tokenPayload };
   }
 
   /* ─── Refresh ─────────────────────────────────────────── */
 
-  async refresh(refreshToken) {
+  async refresh(refreshToken, context = {}) {
     const payload = this.verifyToken(refreshToken);
-    if (!payload?.id) throw AppError.unauthorized('Invalid refresh token');
+    if (!payload?.id || !payload?.tokenFamily || !payload?.jti) {
+      throw AppError.unauthorized('Invalid refresh token');
+    }
+
+    const tokenHash = this.hashToken(refreshToken);
+    const stored = await this.repos.refreshToken.findOne({ tokenHash }, { lean: false });
+
+    // Reuse detection: token not found -> revoke entire family
+    if (!stored) {
+      await this.revokeFamily({ userId: payload.id, tokenFamily: payload.tokenFamily, reason: 'reuse-detected' });
+      throw AppError.unauthorized('Invalid refresh token');
+    }
+
+    // Expired or already revoked -> revoke family and reject
+    const now = new Date();
+    if (stored.revokedAt || stored.expiresAt < now) {
+      await this.revokeFamily({ userId: stored.user, tokenFamily: stored.tokenFamily, reason: stored.revokedAt ? stored.revokedReason || 'revoked' : 'expired' });
+      throw AppError.unauthorized('Refresh token expired');
+    }
 
     const user = await this.repos.user.findById(payload.id, {
       select: 'role name email username status',
     });
     if (!user || user.status === 'suspended') {
+      await this.revokeFamily({ userId: stored.user, tokenFamily: stored.tokenFamily, reason: 'revoked' });
       throw AppError.unauthorized('Account not found or suspended');
     }
 
-    const tokenPayload = {
-      id: user._id, role: user.role, name: user.name,
-      email: user.email, username: user.username,
-    };
+    // Rotate: revoke current token, issue new pair with same family
+    const newJti = crypto.randomUUID();
+    await this.repos.refreshToken.update(stored._id, {
+      revokedAt: now,
+      revokedReason: 'rotated',
+      replacedBy: newJti,
+    });
 
-    const newAccessToken = this.signAccessToken(tokenPayload);
-    const newRefreshToken = this.signRefreshToken({ id: user._id, tokenFamily: crypto.randomUUID() });
+    const tokenPayload = this.buildUserPayload(user);
+    const newAccessToken = this.issueAccessToken(tokenPayload);
+    const newRefreshToken = this.issueRefreshToken({ userId: user._id, tokenFamily: stored.tokenFamily, jti: newJti });
+    await this.persistRefreshToken({ userId: user._id, tokenFamily: stored.tokenFamily, jti: newJti, token: newRefreshToken, context });
 
     return { token: newAccessToken, refreshToken: newRefreshToken, user: tokenPayload };
   }

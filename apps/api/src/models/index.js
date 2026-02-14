@@ -125,6 +125,29 @@ accessLogSchema.index({ user: 1, accessTime: -1 });
 accessLogSchema.index({ accessTime: 1 }, { expireAfterSeconds: 90 * 24 * 3600 });  // TTL 90 days
 
 /* ═══════════════════════════════════════════════════════════════
+   REFRESH TOKEN (hashed, rotation-aware)
+   ═══════════════════════════════════════════════════════════════ */
+const refreshTokenSchema = new Schema(
+  {
+    user:        { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
+    tokenFamily: { type: String, required: true, index: true }, // reuse detection scope
+    jti:         { type: String, required: true, unique: true },
+    tokenHash:   { type: String, required: true, unique: true }, // SHA-256 of token
+    ip:          { type: String },
+    userAgent:   { type: String },
+    replacedBy:  { type: String },
+    revokedAt:   { type: Date },
+    revokedReason:{ type: String, enum: ['rotated', 'expired', 'revoked', 'reuse-detected'] },
+    expiresAt:   { type: Date, required: true },
+    createdAt:   { type: Date, default: Date.now },
+  },
+  { timestamps: false },
+);
+
+refreshTokenSchema.index({ tokenFamily: 1, user: 1 });
+refreshTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+
+/* ═══════════════════════════════════════════════════════════════
    INVOICE
    ═══════════════════════════════════════════════════════════════ */
 const invoiceSchema = new Schema(
@@ -498,6 +521,7 @@ const MembershipPlan       = mongoose.model('MembershipPlan', membershipPlanSche
 const User                 = mongoose.model('User', userSchema);
 const Attendance           = mongoose.model('Attendance', attendanceSchema);
 const AccessLog            = mongoose.model('AccessLog', accessLogSchema);
+const RefreshToken         = mongoose.model('RefreshToken', refreshTokenSchema);
 const Invoice              = mongoose.model('Invoice', invoiceSchema);
 const Payment              = mongoose.model('Payment', paymentSchema);
 const Trainer              = mongoose.model('Trainer', trainerSchema);
@@ -519,7 +543,7 @@ const Notification         = mongoose.model('Notification', notificationSchema);
 const AuditLog             = mongoose.model('AuditLog', auditLogSchema);
 
 module.exports = {
-  MembershipPlan, User, Attendance, AccessLog, Invoice, Payment,
+  MembershipPlan, User, Attendance, AccessLog, RefreshToken, Invoice, Payment,
   Trainer, TrainingSession, WorkoutPlan, Exercise, WorkoutExercise,
   Equipment, EquipmentMaintenance, FitnessClass, ClassSchedule,
   ClassRegistration, SupportCategory, SupportTicket, TicketReply,
